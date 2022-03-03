@@ -594,6 +594,11 @@ function get3rdPartyCosts(mca){
         closingcosts = 2800;
     }
     
+    // Setting minimum closing costs.
+    if (closingcosts > 4900) {
+        closingcosts = 4900;
+    }    
+    
     return roundNumber(closingcosts, 0);
 }
 
@@ -856,15 +861,18 @@ function calculateHECM ( age = 0, propertyValue = 0, mortgageBalance = 0, piPaym
     // Calculating mandatory obligations, which impacts how much cash/LOC can be taken the first year.
     var mandatoryObligations = mortgageBalance + orig + closingCosts + imip; 
     
+    var termOrTenurePayment = 0;
+    var firstYearMoneyVariable = 0;
+    var secondYearMoneyVariable = 0;
+    var firstYearMoneyFixed = 0;
+    
    // Calculating the variable program first. If the mandatory obligations are higher than the principal limit, borrower needs to bring in
     // cash to closing. This will be the case for purchase HECMs.
     if (mandatoryObligations > plVariable) {
         
-        var cashToCloseVariable = plVariable - mandatoryObligations;
+        firstYearMoneyVariable = plVariable - mandatoryObligations;
         
     } else {
-
-        var cashToCloseVariable = 0;
         
         // If a term or tenure payment has been selected, need to calculate the net principal limit first 
         // so we know how much cash is available for term or tenure payments. Minimum term is 5 years.
@@ -896,16 +904,14 @@ function calculateHECM ( age = 0, propertyValue = 0, mortgageBalance = 0, piPaym
                 term = 5;
             }
 
-            // Calculating the monthly payment based on the available money, rate, and term.              
-            var termOrTenurePayment = calculatepayment(netpl, variableEIR, term);  
+            // Calculating the monthly payment based on the available money, EIR, MIP, and term.              
+            termOrTenurePayment = calculatepayment(netpl, variableEIR + MIP_RATE, term);  
 
         } else {
 
-            var termOrTenurePayment = 0;
-
             // Cash/LOC or LOC was selected. Not all of the money is available right away, so need to calculate availability based on the mandatory obligations.
-            var firstYearMoneyVariable = roundNumber(0.6 * plVariable,0);
-            var secondYearMoneyVariable = roundNumber(0.4 * plVariable, 0);
+            firstYearMoneyVariable = roundNumber(0.6 * plVariable,0);
+            secondYearMoneyVariable = roundNumber(0.4 * plVariable, 0);
 
             // If mandatory obligations are more than 60% of the principal limit, then borrower can take extra 10% of the principal limit up to the principal limit. 
             if (mandatoryObligations > firstYearMoneyVariable) {
@@ -932,13 +938,11 @@ function calculateHECM ( age = 0, propertyValue = 0, mortgageBalance = 0, piPaym
     // cash to closing. This will be the case for purchase HECMs.
     if (mandatoryObligations > plFixed) {
     
-        var cashToCloseFixed = plFixed - mandatoryObligations;
+        firstYearMoneyFixed = plFixed - mandatoryObligations;
         
     } else {
-
-        var cashToCloseFixed = 0;
         
-        var firstYearMoneyFixed = roundNumber(0.6 * plFixed, 0);
+        firstYearMoneyFixed = roundNumber(0.6 * plFixed, 0);
 
         // If mandatory obligations are more than 60% of the principal limit, then can take an extra 10% and that's it (not to exceed the principal limit). 
         if (mandatoryObligations > firstYearMoneyFixed) {
@@ -979,8 +983,6 @@ function calculateHECM ( age = 0, propertyValue = 0, mortgageBalance = 0, piPaym
         secondYearMoneyVariable: secondYearMoneyVariable,
         firstYearMoneyFixed: firstYearMoneyFixed,
         termOrTenurePayment: termOrTenurePayment,
-        cashToCloseVariable: cashToCloseVariable,
-        cashToCloseFixed: cashToCloseFixed,
         isPurchase: isPurchase,
         errorMessage: errorMessage
         
@@ -1485,8 +1487,13 @@ function calculatepayment(npl, annualinterest, terminyears) {
     // Can calculate in Excel using the PMT function.
    
     var principal = npl;
+    //console.log ("*************");
+   // console.log ("CALCULATE PMT");
+   // console.log ("NPL: " + npl);
+   // console.log ("Interest: " + annualinterest);
     var interest = (annualinterest / 100 / 12);
-    var payments = terminyears * 12;    
+    var payments = terminyears * 12;  
+   // console.log ("Term: " + payments);
 
     // Now compute the monthly payment figure, using esoteric math.
     var x = Math.pow(1 + interest, payments);
