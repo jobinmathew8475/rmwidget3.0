@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- add mocha css, to show results -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.css">
+  <!-- add mocha framework code -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.js"></script>
+  <script>
+    mocha.setup('bdd'); // minimal setup
+  </script>
+  <!-- add chai -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.js"></script>
+  <script>
+    // chai has a lot of stuff, let's make assert global
+    let assert = chai.assert;
+  </script>
+  <script src="store.min.js"></script>
+  <script src="accounting.js"></script> 
+  <script src="1yearliborrate.js"></script> 
+  <script src="swaprate.js"></script> 
+  <script src="fhaloanlimit.js"></script> 
+  <script src="margin.js"></script> 
+  <script src="zipcodelookup.js"></script> 
+  <script src="rmwidget3.0.js"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+ 
+    <p><a href="http://localhost/myhecm/hecm-reverse-mortgage-for-purchase-calculator/" target="_blank">localhost Purchase Calculator</a></br></p>
+    <p><a href="http://localhost/myhecm/hecm-reverse-mortgage-calculator-2-0-page-1/" target="_blank">localhost Refinance Calculator</a></br></p>
+    <p><a href="http://localhost/myhecm/reverse-mortgage-principal-limit-calculator/" target="_blank">localhost PL Calculator</a></p>
+
+  <script>
+function pow() {
+  return 8; // :) we cheat!
+}
+
+describe("validateAge (Acceptable range 18 to 99)", function() {
+
+    it("Sets age to 62 if string entered.", function() {
+      assert.equal(validateAge("test"), 62);
+    });
+    it("Sets age to 62 if undefined.", function() {
+      assert.equal(validateAge(undefined), 62);
+    });
+    it("Sets age to 62 if NaN.", function() {
+      assert.equal(validateAge(NaN), 62);
+    }); 
+    it("Sets age to 62 if Null.", function() {
+      assert.equal(validateAge(null), 62);
+    });     
+      it("Sets age to 18 if age is at least 0 up to 17.", function() {
+      assert.equal(validateAge(1), 18);
+    });
+    it("Sets age to 18 if age is negative.", function() {
+      assert.equal(validateAge(-1), 18);
+    });  
+      it("Sets age to 99 if age greater than 99.", function() {
+      assert.equal(validateAge(1005), 99);
+    });  
+
+});
+
+describe("isValidAge (Integer values acceptable only)", function() {
+
+    it("Returns false if string entered.", function() {
+      assert.equal(isValidAge("test"), false);
+    });
+    
+    it("Returns false if empty string entered.", function() {
+      assert.equal(isValidAge(""), false);
+    });    
+    
+    it("Returns false if null entered.", function() {
+      assert.equal(isValidAge(null), false);
+    }); 
+    
+    it("Returns false if decimal entered.", function() {
+      assert.equal(isValidAge(2.3), false);
+    });     
+    
+    it("Returns false if > 99 entered.", function() {
+      assert.equal(isValidAge(123), false);
+    });     
+    
+    it("Returns false if < 18 entered.", function() {
+      assert.equal(isValidAge(11), false);
+    });        
+    
+    it("Returns true if integer >= 18 and <= 99 entered.", function() {
+      assert.equal(isValidAge(20), true);
+    });    
+
+});
+
+describe("isValidFloatValue (Integer and decimal values acceptable only)", function() {
+
+    it("Returns false if string entered.", function() {
+      assert.equal(isValidFloatValue("test"), false);
+    });
+    
+    it("Returns false if empty string entered.", function() {
+      assert.equal(isValidFloatValue(""), false);
+    });   
+    
+    it("Returns false if boolean entered.", function() {
+      assert.equal(isValidFloatValue(true), false);
+    });     
+    
+    it("Returns false if null entered.", function() {
+      assert.equal(isValidFloatValue(null), false);
+    }); 
+    
+    it("Returns false if negative number entered.", function() {
+      assert.equal(isValidFloatValue('-200'), false);
+    });       
+    
+    it("Returns false if negative decimal entered.", function() {
+      assert.equal(isValidFloatValue('-200.0'), false);
+    });       
+        
+    it("Returns false if formatted negative decimal currency entered.", function() {
+      assert.equal(isValidFloatValue('-$200,000.02'), false);
+    });     
+    
+    it("Returns true if decimal entered.", function() {
+      assert.equal(isValidFloatValue(223278.58), true);
+    });      
+    
+    it("Returns true if integer entered.", function() {
+      assert.equal(isValidFloatValue(200000), true);
+    });   
+    
+    it("Returns true if misformatted decimal entered.", function() {
+      assert.equal(isValidFloatValue(200000.0), true);
+    });       
+    
+    it("Returns true if currency entered.", function() {
+      assert.equal(isValidFloatValue('$200000'), true);
+    });     
+    
+   it("Returns true if formatted currency entered.", function() {
+      assert.equal(isValidFloatValue('$200,000'), true);
+    });    
+    
+   it("Returns true if formatted decimal currency entered.", function() {
+      assert.equal(isValidFloatValue('$200,000.02'), true);
+    });    
+    
+
+});
+
+describe("isValidYearsLeft (Integer values acceptable only)", function() {
+
+    it("Returns false if string entered.", function() {
+      assert.equal(isValidYearsLeft("test"), false);
+    });
+    
+    it("Returns false if empty string entered.", function() {
+      assert.equal(isValidYearsLeft(""), false);
+    });    
+    
+    it("Returns false if null entered.", function() {
+      assert.equal(isValidYearsLeft(null), false);
+    }); 
+    
+    it("Returns false if decimal entered.", function() {
+      assert.equal(isValidYearsLeft(2.3), false);
+    });     
+    
+    it("Returns false if > 40 entered.", function() {
+      assert.equal(isValidYearsLeft(41), false);
+    });     
+    
+    it("Returns false if < 0 entered.", function() {
+      assert.equal(isValidYearsLeft(-10), false);
+    });       
+    
+    it("Returns false if < 0 entered.", function() {
+      assert.equal(isValidYearsLeft(-.12), false);
+    });      
+    
+    it("Returns true if integer >= 1 and <= 40 entered.", function() {
+      assert.equal(isValidYearsLeft(20), true);
+    });    
+
+});
+
+describe("isValidProceedsOptionIndex (Integer values acceptable only)", function() {
+
+    it("Returns false if string entered.", function() {
+      assert.equal(isValidProceedsOptionIndex("test"), false);
+    });
+    
+    it("Returns false if empty string entered.", function() {
+      assert.equal(isValidProceedsOptionIndex(""), false);
+    });    
+    
+    it("Returns false if null entered.", function() {
+      assert.equal(isValidProceedsOptionIndex(null), false);
+    }); 
+    
+    it("Returns false if decimal entered.", function() {
+      assert.equal(isValidProceedsOptionIndex(2.3), false);
+    });     
+    
+    it("Returns false if > 5 entered.", function() {
+      assert.equal(isValidProceedsOptionIndex(6), false);
+    });     
+    
+    it("Returns false if < 0 entered.", function() {
+      assert.equal(isValidProceedsOptionIndex(-10), false);
+    });       
+    
+    it("Returns false if < 0 entered.", function() {
+      assert.equal(isValidProceedsOptionIndex(-.12), false);
+    });      
+    
+    it("Returns true if integer >= 0 and <= 5 entered.", function() {
+      assert.equal(isValidProceedsOptionIndex(4), true);
+    });    
+
+});
+
+describe("getOrig", function() {    
+
+    it("Origination calculation test.", function() {
+      assert.equal(getOrig(150000), 3000);
+    });    
+
+    it("Origination calculation test.", function() {
+      assert.equal(getOrig(250000), 4500);
+    });
+    
+    it("Origination calculation test.", function() {
+      assert.equal(getOrig(800000), 6000);
+    });    
+ 
+});
+
+describe("calculateHECM", function() {
+    
+    var lendingLimit = 970800;
+    
+    it("Age for calculation purposes: should be 1 year older than submitted age.", function() {
+        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,2.25,false);
+        assert.equal(objHECMResults.ageForCalculation, 66);
+    });  
+    
+    it("Age for calculation purposes: max age 99.", function() {
+        var objHECMResults = calculateHECM(99,400000,135000,965,23,1,1.75,.33,2.25,false);
+        assert.equal(objHECMResults.ageForCalculation, 99);
+    });   
+    
+    it("PLF calculation test.", function() {
+        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,2.25,false);
+        assert.equal(objHECMResults.fixedPLF, .497);
+    });   
+    
+    it("MCA calculation: less than lending limit.", function() {
+        var objHECMResults = calculateHECM(64,400000,135000,965,23,1,1.75,.33,2.25,false);
+        assert.equal(objHECMResults.mca, 400000);
+    });     
+    
+    it("MCA calculation: greater than lending limit.", function() {
+        var objHECMResults = calculateHECM(64,1400000,135000,965,23,1,1.75,.33,2.25,false);
+        assert.equal(objHECMResults.mca, lendingLimit);
+    });      
+
+    it("PL calculation test.", function() {
+        var objHECMResults = calculateHECM(64,400000,135000,965,23,1,1.75,.33,2.25,false);
+        assert.equal(objHECMResults.plFixed, 196000);
+    });    
+    
+    it("IMIP calculation test.", function() {
+        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,2.25,false);
+        assert.equal(objHECMResults.imip, 8000);
+    });   
+    
+    it("Origination calculation test.", function() {
+        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,2.25,false);
+        assert.equal(objHECMResults.origination, 6000);
+    });     
+    
+    it("IMIP calculation test.", function() {
+        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,2.25,false);
+        assert.equal(objHECMResults.imip, 8000);
+    });       
+ 
+
+});
+
+// Zip code tests.
+//describe("getState function", function() {
+//    it("Lookup 0, which is NOT VALID.", function() {
+//      assert.equal(getState("0"), '??');
+//    });    
+//    it("Lookup 2792, which is NOT VALID.", function() {
+//      assert.equal(getState("2792"), '??');
+//    });
+//    it("Lookup 02792, which is NOT VALID.", function() {
+//      assert.equal(getState("02792"), '??');
+//    });   
+//    it("Lookup 02938, which is in RI.", function() {
+//      assert.equal(getState("02938"), 'RI');
+//    });   
+//    it("Lookup 14975, which is NOT VALID.", function() {
+//      assert.equal(getState("14975"), '??');
+//    });          
+//    it("Lookup 14976, which is NOT VALID.", function() {
+//      assert.equal(getState("14976"), '??');
+//    });  
+//    it("Lookup 84070, which is in UT.", function() {
+//      assert.equal(getState("84070"), 'UT');
+//    });      
+//    it("Lookup 92870, which is in CA.", function() {
+//      assert.equal(getState("92870"), 'CA');
+//    });     
+//    it("Lookup 99950, which is in AK.", function() {
+//      assert.equal(getState("99950"), 'AK');
+//    }); 
+//    it('Lookup 1001, which is MA.', function() {
+//        assert.equal(getState(1001), 'MA');
+//    });
+//    it('Lookup 2801, which is RI.', function() {
+//        assert.equal(getState(2801), 'RI');
+//    });
+//    it('Lookup 3031, which is NH.', function() {
+//        assert.equal(getState(3031), 'NH');
+//    });
+//    it('Lookup 3901, which is ME.', function() {
+//        assert.equal(getState(3901), 'ME');
+//    });
+//    it('Lookup 5001, which is VT.', function() {
+//        assert.equal(getState(5001), 'VT');
+//    });
+//    it('Lookup 5501, which is MA.', function() {
+//        assert.equal(getState(5501), 'MA');
+//    });
+//    it('Lookup 5601, which is VT.', function() {
+//        assert.equal(getState(5601), 'VT');
+//    });
+//    it('Lookup 6001, which is CT.', function() {
+//        assert.equal(getState(6001), 'CT');
+//    });
+//    it('Lookup 6390, which is NY.', function() {
+//        assert.equal(getState(6390), 'NY');
+//    });
+//    it('Lookup 6401, which is CT.', function() {
+//        assert.equal(getState(6401), 'CT');
+//    });
+//    it('Lookup 7001, which is NJ.', function() {
+//        assert.equal(getState(7001), 'NJ');
+//    });
+//    it('Lookup 10001, which is NY.', function() {
+//        assert.equal(getState(10001), 'NY');
+//    });
+//    it('Lookup 15001, which is PA.', function() {
+//        assert.equal(getState(15001), 'PA');
+//    });
+//    it('Lookup 19701, which is DE.', function() {
+//        assert.equal(getState(19701), 'DE');
+//    });
+//    it('Lookup 20001, which is DC.', function() {
+//        assert.equal(getState(20001), 'DC');
+//    });
+//    
+//    it('Lookup 84938, which is NOT VALID.', function() {
+//        assert.equal(getState(84938), '??');
+//    });
+//    it('Lookup 99950, which is AK.', function() {
+//        assert.equal(getState(99950), 'AK');
+//    });
+// 
+//});
+//
+//describe("lookupStateCode function", function() {
+//    it('Lookup Alabama.', function() {
+//        assert.equal(lookupStateCode('Alabama'), 'AL');
+//    });
+//    it('Lookup Alaska.', function() {
+//        assert.equal(lookupStateCode('Alaska'), 'AK');
+//    });
+//    it('Lookup Arizona.', function() {
+//        assert.equal(lookupStateCode('Arizona'), 'AZ');
+//    });
+//    it('Lookup Arkansas.', function() {
+//        assert.equal(lookupStateCode('Arkansas'), 'AR');
+//    });
+//    it('Lookup California.', function() {
+//        assert.equal(lookupStateCode('California'), 'CA');
+//    });
+//    it('Lookup Colorado.', function() {
+//        assert.equal(lookupStateCode('Colorado'), 'CO');
+//    });
+//    it('Lookup Connecticut.', function() {
+//        assert.equal(lookupStateCode('Connecticut'), 'CT');
+//    });
+//    it('Lookup Delaware.', function() {
+//        assert.equal(lookupStateCode('Delaware'), 'DE');
+//    });
+//    it('Lookup District Of Columbia.', function() {
+//        assert.equal(lookupStateCode('District Of Columbia'), 'DC');
+//    });
+//    it('Lookup Florida.', function() {
+//        assert.equal(lookupStateCode('Florida'), 'FL');
+//    });
+//    it('Lookup Georgia.', function() {
+//        assert.equal(lookupStateCode('Georgia'), 'GA');
+//    });
+//    it('Lookup Hawaii.', function() {
+//        assert.equal(lookupStateCode('Hawaii'), 'HI');
+//    });
+//    it('Lookup Idaho.', function() {
+//        assert.equal(lookupStateCode('Idaho'), 'ID');
+//    });
+//    it('Lookup Illinois.', function() {
+//        assert.equal(lookupStateCode('Illinois'), 'IL');
+//    });
+//    it('Lookup Indiana.', function() {
+//        assert.equal(lookupStateCode('Indiana'), 'IN');
+//    });
+//    it('Lookup Iowa.', function() {
+//        assert.equal(lookupStateCode('Iowa'), 'IA');
+//    });
+//    it('Lookup Kansas.', function() {
+//        assert.equal(lookupStateCode('Kansas'), 'KS');
+//    });
+//    it('Lookup Kentucky.', function() {
+//        assert.equal(lookupStateCode('Kentucky'), 'KY');
+//    });
+//    it('Lookup Louisiana.', function() {
+//        assert.equal(lookupStateCode('Louisiana'), 'LA');
+//    });
+//    it('Lookup Maine.', function() {
+//        assert.equal(lookupStateCode('Maine'), 'ME');
+//    });
+//    it('Lookup Maryland.', function() {
+//        assert.equal(lookupStateCode('Maryland'), 'MD');
+//    });
+//    it('Lookup Massachusetts.', function() {
+//        assert.equal(lookupStateCode('Massachusetts'), 'MA');
+//    });
+//    it('Lookup Michigan.', function() {
+//        assert.equal(lookupStateCode('Michigan'), 'MI');
+//    });
+//    it('Lookup Minnesota.', function() {
+//        assert.equal(lookupStateCode('Minnesota'), 'MN');
+//    });
+//    it('Lookup Mississippi.', function() {
+//        assert.equal(lookupStateCode('Mississippi'), 'MS');
+//    });
+//    it('Lookup Missouri.', function() {
+//        assert.equal(lookupStateCode('Missouri'), 'MO');
+//    });
+//    it('Lookup Montana.', function() {
+//        assert.equal(lookupStateCode('Montana'), 'MT');
+//    });
+//    it('Lookup Nebraska.', function() {
+//        assert.equal(lookupStateCode('Nebraska'), 'NE');
+//    });
+//    it('Lookup Nevada.', function() {
+//        assert.equal(lookupStateCode('Nevada'), 'NV');
+//    });
+//    it('Lookup New Hampshire.', function() {
+//        assert.equal(lookupStateCode('New Hampshire'), 'NH');
+//    });
+//    it('Lookup New Jersey.', function() {
+//        assert.equal(lookupStateCode('New Jersey'), 'NJ');
+//    });
+//    it('Lookup New Mexico.', function() {
+//        assert.equal(lookupStateCode('New Mexico'), 'NM');
+//    });
+//    it('Lookup New York.', function() {
+//        assert.equal(lookupStateCode('New York'), 'NY');
+//    });
+//    it('Lookup North Carolina.', function() {
+//        assert.equal(lookupStateCode('North Carolina'), 'NC');
+//    });
+//    it('Lookup North Dakota.', function() {
+//        assert.equal(lookupStateCode('North Dakota'), 'ND');
+//    });
+//    it('Lookup Ohio.', function() {
+//        assert.equal(lookupStateCode('Ohio'), 'OH');
+//    });
+//    it('Lookup Oklahoma.', function() {
+//        assert.equal(lookupStateCode('Oklahoma'), 'OK');
+//    });
+//    it('Lookup Oregon.', function() {
+//        assert.equal(lookupStateCode('Oregon'), 'OR');
+//    });
+//    it('Lookup Pennsylvania.', function() {
+//        assert.equal(lookupStateCode('Pennsylvania'), 'PA');
+//    });
+//    it('Lookup Rhode Island.', function() {
+//        assert.equal(lookupStateCode('Rhode Island'), 'RI');
+//    });
+//    it('Lookup South Carolina.', function() {
+//        assert.equal(lookupStateCode('South Carolina'), 'SC');
+//    });
+//    it('Lookup South Dakota.', function() {
+//        assert.equal(lookupStateCode('South Dakota'), 'SD');
+//    });
+//    it('Lookup Tennessee.', function() {
+//        assert.equal(lookupStateCode('Tennessee'), 'TN');
+//    });
+//    it('Lookup Texas.', function() {
+//        assert.equal(lookupStateCode('Texas'), 'TX');
+//    });
+//    it('Lookup Utah.', function() {
+//        assert.equal(lookupStateCode('Utah'), 'UT');
+//    });
+//    it('Lookup Vermont.', function() {
+//        assert.equal(lookupStateCode('Vermont'), 'VT');
+//    });
+//    it('Lookup Virginia.', function() {
+//        assert.equal(lookupStateCode('Virginia'), 'VA');
+//    });
+//    it('Lookup Washington.', function() {
+//        assert.equal(lookupStateCode('Washington'), 'WA');
+//    });
+//    it('Lookup West Virginia.', function() {
+//        assert.equal(lookupStateCode('West Virginia'), 'WV');
+//    });
+//    it('Lookup Wisconsin.', function() {
+//        assert.equal(lookupStateCode('Wisconsin'), 'WI');
+//    });
+//    it('Lookup Wyoming.', function() {
+//        assert.equal(lookupStateCode('Wyoming'), 'WY');
+//    });       
+//});
+//
+//describe("lookupStateName function", function() {
+//    it('Lookup  AL.', function() {
+//        assert.equal(lookupStateName('AL'), 'Alabama');
+//    });
+//    it('Lookup  AK.', function() {
+//        assert.equal(lookupStateName('AK'), 'Alaska');
+//    });
+//    it('Lookup AZ.', function() {
+//        assert.equal(lookupStateName('AZ'), 'Arizona');
+//    });
+//    it('Lookup  AR.', function() {
+//        assert.equal(lookupStateName('AR'), 'Arkansas');
+//    });
+//    it('Lookup  CA.', function() {
+//        assert.equal(lookupStateName('CA'), 'California');
+//    });
+//    it('Lookup  CO.', function() {
+//        assert.equal(lookupStateName('CO'), 'Colorado');
+//    });
+//    it('Lookup  CT.', function() {
+//        assert.equal(lookupStateName('CT'), 'Connecticut');
+//    });
+//    it('Lookup  DE.', function() {
+//        assert.equal(lookupStateName('DE'), 'Delaware');
+//    });
+//    it('Lookup  DC.', function() {
+//        assert.equal(lookupStateName('DC'), 'District Of Columbia');
+//    });
+//    it('Lookup  FL.', function() {
+//        assert.equal(lookupStateName('FL'), 'Florida');
+//    });
+//    it('Lookup  GA.', function() {
+//        assert.equal(lookupStateName('GA'), 'Georgia');
+//    });
+//    it('Lookup  HI.', function() {
+//        assert.equal(lookupStateName('HI'), 'Hawaii');
+//    });
+//    it('Lookup  ID.', function() {
+//        assert.equal(lookupStateName('ID'), 'Idaho');
+//    });
+//    it('Lookup  IL.', function() {
+//        assert.equal(lookupStateName('IL'), 'Illinois');
+//    });
+//    it('Lookup  IN.', function() {
+//        assert.equal(lookupStateName('IN'), 'Indiana');
+//    });
+//    it('Lookup  IA.', function() {
+//        assert.equal(lookupStateName('IA'), 'Iowa');
+//    });
+//    it('Lookup  KS.', function() {
+//        assert.equal(lookupStateName('KS'), 'Kansas');
+//    });
+//    it('Lookup  KY.', function() {
+//        assert.equal(lookupStateName('KY'), 'Kentucky');
+//    });
+//    it('Lookup  LA.', function() {
+//        assert.equal(lookupStateName('LA'), 'Louisiana');
+//    });
+//    it('Lookup  ME.', function() {
+//        assert.equal(lookupStateName('ME'), 'Maine');
+//    });
+//    it('Lookup  MD.', function() {
+//        assert.equal(lookupStateName('MD'), 'Maryland');
+//    });
+//    it('Lookup  MA.', function() {
+//        assert.equal(lookupStateName('MA'), 'Massachusetts');
+//    });
+//    it('Lookup  MI.', function() {
+//        assert.equal(lookupStateName('MI'), 'Michigan');
+//    });
+//    it('Lookup  MN.', function() {
+//        assert.equal(lookupStateName('MN'), 'Minnesota');
+//    });
+//    it('Lookup  MS.', function() {
+//        assert.equal(lookupStateName('MS'), 'Mississippi');
+//    });
+//    it('Lookup  MO.', function() {
+//        assert.equal(lookupStateName('MO'), 'Missouri');
+//    });
+//    it('Lookup  MT.', function() {
+//        assert.equal(lookupStateName('MT'), 'Montana');
+//    });
+//    it('Lookup  NE.', function() {
+//        assert.equal(lookupStateName('NE'), 'Nebraska');
+//    });
+//    it('Lookup  NV.', function() {
+//        assert.equal(lookupStateName('NV'), 'Nevada');
+//    });
+//    it('Lookup  NH.', function() {
+//        assert.equal(lookupStateName('NH'), 'New Hampshire');
+//    });
+//    it('Lookup  NJ.', function() {
+//        assert.equal(lookupStateName('NJ'), 'New Jersey');
+//    });
+//    it('Lookup  NM.', function() {
+//        assert.equal(lookupStateName('NM'), 'New Mexico');
+//    });
+//    it('Lookup  NY.', function() {
+//        assert.equal(lookupStateName('NY'), 'New York');
+//    });
+//    it('Lookup  NC.', function() {
+//        assert.equal(lookupStateName('NC'), 'North Carolina');
+//    });
+//    it('Lookup  ND.', function() {
+//        assert.equal(lookupStateName('ND'), 'North Dakota');
+//    });
+//    it('Lookup  OH.', function() {
+//        assert.equal(lookupStateName('OH'), 'Ohio');
+//    });
+//    it('Lookup  OK.', function() {
+//        assert.equal(lookupStateName('OK'), 'Oklahoma');
+//    });
+//    it('Lookup  OR.', function() {
+//        assert.equal(lookupStateName('OR'), 'Oregon');
+//    });
+//    it('Lookup  PA.', function() {
+//        assert.equal(lookupStateName('PA'), 'Pennsylvania');
+//    });
+//    it('Lookup  RI.', function() {
+//        assert.equal(lookupStateName('RI'), 'Rhode Island');
+//    });
+//    it('Lookup  SC.', function() {
+//        assert.equal(lookupStateName('SC'), 'South Carolina');
+//    });
+//    it('Lookup  SD.', function() {
+//        assert.equal(lookupStateName('SD'), 'South Dakota');
+//    });
+//    it('Lookup  TN.', function() {
+//        assert.equal(lookupStateName('TN'), 'Tennessee');
+//    });
+//    it('Lookup  TX.', function() {
+//        assert.equal(lookupStateName('TX'), 'Texas');
+//    });
+//    it('Lookup  UT.', function() {
+//        assert.equal(lookupStateName('UT'), 'Utah');
+//    });
+//    it('Lookup  VT.', function() {
+//        assert.equal(lookupStateName('VT'), 'Vermont');
+//    });
+//    it('Lookup  VA.', function() {
+//        assert.equal(lookupStateName('VA'), 'Virginia');
+//    });
+//    it('Lookup  WA.', function() {
+//        assert.equal(lookupStateName('WA'), 'Washington');
+//    });
+//    it('Lookup  WV.', function() {
+//        assert.equal(lookupStateName('WV'), 'West Virginia');
+//    });
+//    it('Lookup  WI.', function() {
+//        assert.equal(lookupStateName('WI'), 'Wisconsin');
+//    });
+//    it('Lookup  WY.', function() {
+//        assert.equal(lookupStateName('WY'), 'Wyoming');
+//    });
+//
+//});
+//
+//describe("getDuplicateState function", function() {
+//    
+//    it("Lookup 3579, which is NH,ME.", function() {
+//      assert.equal(getDuplicateState("3579"), 'NH,ME');
+//    }); 
+//    
+//    it("Lookup 30559, which is GA,NC.", function() {
+//      assert.equal(getDuplicateState("30559"), 'GA,NC');
+//    });   
+//    
+//    it("Lookup 57717, which is MT,SD,WY.", function() {
+//      assert.equal(getDuplicateState("57717"), 'MT,SD,WY');
+//    });       
+//
+//});
+//
+//
+//describe("validateAge (Acceptable range 18 to 99)", function() {
+//
+//    it("Sets age to 62 if string entered.", function() {
+//      assert.equal(validateAge("test"), 62);
+//    });
+//    it("Sets age to 62 if undefined.", function() {
+//      assert.equal(validateAge(undefined), 62);
+//    });
+//    it("Sets age to 62 if NaN.", function() {
+//      assert.equal(validateAge(NaN), 62);
+//    }); 
+//    it("Sets age to 62 if Null.", function() {
+//      assert.equal(validateAge(null), 62);
+//    });     
+//      it("Sets age to 18 if age is at least 0 up to 17.", function() {
+//      assert.equal(validateAge(1), 18);
+//    });
+//    it("Sets age to 18 if age is negative.", function() {
+//      assert.equal(validateAge(-1), 18);
+//    });  
+//      it("Sets age to 99 if age greater than 99.", function() {
+//      assert.equal(validateAge(1005), 99);
+//    });  
+//
+//});
+//
+//describe("validateYearsLeft (Acceptable range 0 to 40)", function() {
+//
+//    it("Sets years left to 0 if string entered.", function() {
+//      assert.equal(validateYearsLeft("test"), 0);
+//    });
+//    it("Sets years left to 0 if undefined.", function() {
+//      assert.equal(validateYearsLeft(undefined), 0);
+//    });
+//    it("Sets years left to 0 if NaN.", function() {
+//      assert.equal(validateYearsLeft(NaN), 0);
+//    }); 
+//    it("Sets years left to 0 if Null.", function() {
+//      assert.equal(validateYearsLeft(null), 0);
+//    });     
+//    it("Sets years left to zero if negative.", function() {
+//      assert.equal(validateYearsLeft(-1), 0);
+//    });  
+//      it("Sets years left to 40 if greater than 40.", function() {
+//      assert.equal(validateYearsLeft(1005), 40);
+//    });  
+//
+//});
+//
+//describe("validateStateLocationIndex (Acceptable range 0 to 49)", function() {
+//
+//    it("Sets state location select box index to 0 if string entered.", function() {
+//      assert.equal(validateStateLocationIndex("test"), 0);
+//    });
+//    it("Sets state location select box index to 0 if undefined.", function() {
+//      assert.equal(validateStateLocationIndex(undefined), 0);
+//    });
+//    it("Sets state location select box index to 0 if NaN.", function() {
+//      assert.equal(validateStateLocationIndex(NaN), 0);
+//    }); 
+//    it("Sets state location select box index to 0 if Null.", function() {
+//      assert.equal(validateStateLocationIndex(null), 0);
+//    });     
+//    it("Sets state location select box index to 0 if negative.", function() {
+//      assert.equal(validateStateLocationIndex(-1), 0);
+//    });  
+//      it("Sets state location select box index to 0 if greater than 49.", function() {
+//      assert.equal(validateStateLocationIndex(1005), 0);
+//    });  
+//
+//});
+//
+//describe("validateProceedsOptionIndex (Acceptable range 0 to 5)", function() {
+//
+//    it("Sets state location select box index to 0 if string entered.", function() {
+//      assert.equal(validateProceedsOptionIndex("test"), 0);
+//    });
+//    it("Sets state location select box index to 0 if undefined.", function() {
+//      assert.equal(validateProceedsOptionIndex(undefined), 0);
+//    });
+//    it("Sets state location select box index to 0 if NaN.", function() {
+//      assert.equal(validateProceedsOptionIndex(NaN), 0);
+//    }); 
+//    it("Sets state location select box index to 0 if Null.", function() {
+//      assert.equal(validateProceedsOptionIndex(null), 0);
+//    });     
+//    it("Sets state location select box index to 0 if negative.", function() {
+//      assert.equal(validateProceedsOptionIndex(-1), 0);
+//    });  
+//      it("Sets state location select box index to 0 if greater than 5.", function() {
+//      assert.equal(validateProceedsOptionIndex(1005), 0);
+//    });  
+//
+//});
+//
+//
+//describe("validateCurrency", function() {
+//    
+//    it("Set value to 20 if $20 entered.", function() {
+//      assert.equal(validateCurrency("$20"), 20);
+//    });   
+//    it("Set value to 0 if string entered.", function() {
+//      assert.equal(validateCurrency("test"), 0);
+//    });    
+//    it("Set value to 0 if undefined.", function() {
+//      assert.equal(validateCurrency(undefined), 0);
+//    });     
+//    it("Set value to 0 if NaN.", function() {
+//      assert.equal(validateCurrency(NaN), 0);
+//    });  
+//    it("Set value to 0 if Null.", function() {
+//      assert.equal(validateCurrency(null), 0);
+//    });      
+//    it("Set value to 0 if value negative.", function() {
+//      assert.equal(validateCurrency(-100000.34), 0);
+//    });    
+//    it("Set value to 5000000 if value greater than that.", function() {
+//      assert.equal(validateCurrency(999999999), 5000000);
+//    });       
+//});
+//
+//describe("getIMIP", function() {
+//    
+//    it("IMIP is $2K for $100,000 house.", function() {
+//      assert.equal(getIMIP(100000), 2000);
+//    });      
+//    
+//    it("IMIP is $10K for $500,000 house.", function() {
+//      assert.equal(getIMIP(500000), 10000);
+//    });      
+//    
+//    it("IMIP is $13,593 for home value matching the lending limit of $679,650.", function() {
+//      assert.equal(getIMIP(679650), 13593);
+//    }); 
+//    
+//    it("IMIP is $13,593 for home value $1 over the lending limit of $679,650.", function() {
+//      assert.equal(getIMIP(679651), 13593);
+//    });      
+//        
+//    it("IMIP is $13,593 for home values over lending limit. Testing $900K home value.", function() {
+//      assert.equal(getIMIP(900000), 16448);
+//    });   
+//    
+//    it("Oddball $350,256.82 home value to check that rounded integer IMIP of $7005 returned (no floats/cents).", function() {
+//      assert.equal(getIMIP(350256.82), 7005);
+//    });        
+//   
+//});
+//
+//describe("getOrig (orig = 1% of MCA with a minimum of $2500 and a maximum of $6000).", function() {
+//    
+//    it("Min orig $2500 for $1 house.", function() {
+//      assert.equal(getOrig(1), 2500);
+//    });    
+//    
+//    it("1% orig $2500 for $250,000 house.", function() {
+//      assert.equal(getOrig(250000), 2500);
+//    });     
+//    
+//    it("1% orig $3500 for $350,000 house.", function() {
+//      assert.equal(getOrig(350000), 3500);
+//    });   
+//    
+//    it("Max orig $6000 for $650,000 house.", function() {
+//      assert.equal(getOrig(650000), 6000);
+//    });    
+//    
+//    it("Max orig $6000 for $900,000 house.", function() {
+//      assert.equal(getOrig(900000), 6000);
+//    });  
+//    
+//    it("Oddball $350,256.82 home value to check that rounded integer orig of $3503 returned (no floats/cents).", function() {
+//      assert.equal(getOrig(350256.82), 3503);
+//    });     
+//  
+//});
+//
+//describe("get3rdPartyCosts (Closing costs are 0.625% of MCA with a minimum of $2800).", function() {
+//    
+//    it("Min 3rd party costs of $2800 for $1 house.", function() {
+//      assert.equal(get3rdPartyCosts(1), 2800);
+//    });      
+//  
+//    it("Max 3rd party costs of $4248 for $679,651 (lending limit) house.", function() {
+//      assert.equal(get3rdPartyCosts(679651), 4248);
+//    });   
+//    
+//    it("Max 3rd party costs of $4248 for $900,000 house.", function() {
+//      assert.equal(get3rdPartyCosts(900000), 5140);
+//    });      
+//     
+//    it("Oddball $523,256.82 home value to check that rounded integer closing costs of $3270 returned (no floats/cents).", function() {
+//      assert.equal(get3rdPartyCosts(523256.12), 3270);
+//    });   
+//    
+//});
+//
+//describe('isBoolean', function() {
+//    it("Return false if -1 is passed.", function() {
+//      assert.equal(isBoolean(-1), false);
+//    });     
+//    it("Return false if 1 is passed.", function() {
+//      assert.equal(isBoolean(1), false);
+//    });   
+//    it("Return false if 0 passed.", function() {
+//      assert.equal(isBoolean(1), false);
+//    }); 
+//    it("Return false if string passed.", function() {
+//      assert.equal(isBoolean("test"), false);
+//    }); 
+//    it("Return false if undefined passed.", function() {
+//      assert.equal(isBoolean(undefined), false);
+//    });      
+//    it("Return false if NaN passed.", function() {
+//      assert.equal(isBoolean(NaN), false);
+//    });      
+//    it("Return false if null passed.", function() {
+//      assert.equal(isBoolean(null), false);
+//    });      
+//    it("Return TRUE if FALSE passed.", function() {
+//      assert.equal(isBoolean(false), true);
+//    });      
+//    it("Return TRUE if TRUE passed.", function() {
+//      assert.equal(isBoolean(true), true);
+//    });      
+//});
+//
+//describe('calculatepayment', function() {
+//    
+//    it("Calculate 10-year term payment.", function() {
+//      assert.equal(calculatepayment(96700,5.82,10), 1065);
+//    });  
+//    it("Calculate 15-year term payment.", function() {
+//      assert.equal(calculatepayment(96700,5.82,15), 807);
+//    });  
+//    it("Calculate 20-year term payment.", function() {
+//      assert.equal(calculatepayment(96700,5.82,20), 683);
+//    });  
+//    it("Calculate tenure payment for 72-year old.", function() {
+//      assert.equal(calculatepayment(96700,5.82,28), 584);
+//    });      
+//});
+//
+//describe('calcaccruals', function() {
+//    
+//    it("Calculate accruals and return balance: 5.82%, $198,787.83 starting balance", function() {
+//      assert.equal(calcaccruals(198787.83, .0582, 0, false), 210670.94);
+//    });  
+//    
+//    it("Calculate accruals and return balance: 5.82%, $187,575 starting balance, $623.23 tenure payment", function() {
+//      assert.equal(calcaccruals(187575, .0582, 623.23, false), 206506.60);
+//    });  
+//    
+//    it("Calculate accruals and return interest ONLY: 5.82%, $198,787.83 starting balance", function() {
+//      assert.equal(calcaccruals(198787.83, .0582, 0, true), 11883.11);
+//    });      
+//   
+//});
+//
+//describe('getPLFactor', function() {
+//    
+//    it("Get PL factor for EIR 5.82% and age 87.", function() {
+//      assert.equal(getPLFactor(87, .0582), 0.581);
+//    }); 
+//    
+//    it("Get PL factor for EIR 6.71% and age 42.", function() {
+//      assert.equal(getPLFactor(42, .0671), 0.199);
+//    });      
+//   
+//});
+//
+//describe("CalculateRM PURCHASE for 88-Year Old", function() {
+//    
+//
+//    it("PURCHASE RETURN VALUE TEST: Age 88, PURCHASE $225,000 home, Variable EIR 5.75% and Fixed EIR 5.82%, Variable PLF: 59.8% and Fixed PLF: 59.3%.", function() {  
+//        
+//        var objBorrower = {
+//            age: 88, 
+//            propval: 225000,
+//            loanbal: 0,
+//            pipayment: 0,
+//            yearsleft: 0,
+//            state: 0,
+//            proceedsoptionindex: 0, // Tenure.
+//            ispurchase: true
+//        };
+//        
+//        var objHECM = calculateRM(objBorrower, 3.32, 3.25, 2.43, 2.50 ); // Passing in Swap, LIBOR, variable margin, and fixed margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//        //var objHECM = calculateRM(objBorrower, { tenYearICESwapRate: 3.32, oneYearLIBORRate: 3.25, marginVariable: 2.43, marginFixed: 2.50  } ); // Passing in Swap, LIBOR and margin. Fully-indexed rates are 5.00 and 5.25, respectively.         
+//
+//        assert.equal(objHECM.mca, 225000);  
+//        assert.equal(objHECM.fixedEIR, 5.82, "Calculated fixed EIR incorrect.");          
+//        assert.equal(objHECM.fixedIIR, 5.82, "Calculated fixed IIR incorrect."); 
+//        
+//        assert.equal(objHECM.variableEIR, 5.75, "Calculated variable EIR incorrect.");   
+//        assert.equal(objHECM.variableIIR, 5.68, "Calculated variable IIR incorrect."); 
+//        
+//        assert.equal(objHECM.plFixed, 136800, "PL for fixed is incorrect.");
+//        assert.equal(objHECM.plVariable, 137700, "PL for variable is incorrect.");        
+//        
+//        assert.equal(objHECM.mandatoryobligations, 234800, "Mandatory obligations is incorrect.");        
+//        assert.equal(objHECM.firstYearMoneyVariable, 0, "Variable program first year cash is incorrect.");    
+//        assert.equal(objHECM.secondYearMoneyVariable, 0, "Variable program second year cash is incorrect.");             
+//        assert.equal(objHECM.firstYearMoneyFixed, 0, "Fixed program cash is incorrect.");  
+//        
+//        assert.equal(objHECM.termOrTenurePayment, 0, "Term or tenure payment is incorrect.");   
+//        
+//        assert.equal(objHECM.cashToCloseVariable, -97100, "Cash to close variable is incorrect.");   
+//        assert.equal(objHECM.cashToCloseFixed, -98000, "Cash to close fixed is incorrect.");           
+//         
+//  });  
+//});
+//
+//describe("CalculateRM PURCHASE for 62-Year Old", function() {
+//    
+//
+//    it("PURCHASE RETURN VALUE TEST: Age 62, PURCHASE $150,000 home, Variable EIR 5.75% and Fixed EIR 5.82%, Variable PLF: 37% and Fixed PLF: 36.3%.", function() {  
+//        
+//        var objBorrower = {
+//            age: 62, 
+//            propval: 150000,
+//            loanbal: 0,
+//            pipayment: 0,
+//            yearsleft: 0,
+//            state: 0,
+//            proceedsoptionindex: 0, // Tenure.
+//            ispurchase: true
+//        };
+//        
+//        //var objHECM = calculateRM(objBorrower, { tenYearICESwapRate: 3.32, oneYearLIBORRate: 3.25, marginVariable: 2.43, marginFixed: 2.50  } ); // Passing in Swap, LIBOR and margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//        var objHECM = calculateRM(objBorrower, 3.32, 3.25, 2.43, 2.50 ); // Passing in Swap, LIBOR, variable margin, and fixed margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//
+//        assert.equal(objHECM.mca, 150000);  
+//        assert.equal(objHECM.fixedEIR, 5.82, "Calculated fixed EIR incorrect.");          
+//        assert.equal(objHECM.fixedIIR, 5.82, "Calculated fixed IIR incorrect."); 
+//        
+//        assert.equal(objHECM.variableEIR, 5.75, "Calculated variable EIR incorrect.");   
+//        assert.equal(objHECM.variableIIR, 5.68, "Calculated variable IIR incorrect."); 
+//        
+//        assert.equal(objHECM.plVariable, 56400, "PL for fixed is incorrect.");
+//        assert.equal(objHECM.plFixed, 55500, "PL for variable is incorrect.");        
+//        
+//        assert.equal(objHECM.mandatoryobligations, 158300, "Mandatory obligations is incorrect.");        
+//        assert.equal(objHECM.firstYearMoneyVariable, 0, "Variable program first year cash is incorrect.");    
+//        assert.equal(objHECM.secondYearMoneyVariable, 0, "Variable program second year cash is incorrect.");             
+//        assert.equal(objHECM.firstYearMoneyFixed, 0, "Fixed program cash is incorrect.");  
+//        
+//        assert.equal(objHECM.termOrTenurePayment, 0, "Term or tenure payment is incorrect.");   
+//        
+//        assert.equal(objHECM.cashToCloseVariable, -101900, "Cash to close variable is incorrect.");   
+//        assert.equal(objHECM.cashToCloseFixed, -102800, "Cash to close fixed is incorrect.");           
+//         
+//  });  
+//});
+//
+//describe("CalculateRM Traditional Tenure Payment for 88-Year Old Short-to-close", function() {    
+//
+//    it("TENURE PMT RETURN VALUE TEST: Age 88, $0K mortgage balance, $225,000 home value,  Variable EIR 5.75% and Fixed EIR 5.82%, Variable PLF: 59.8% and Fixed PLF: 59.3%.", function() {  
+//        
+//        var objBorrower = {
+//            age: 88, 
+//            propval: 225000,
+//            loanbal: 168000,
+//            pipayment: 885,
+//            yearsleft: 28,
+//            state: 0,
+//            proceedsoptionindex: 2, // Tenure.
+//            ispurchase: false
+//        };
+//        
+//        var objHECM = calculateRM(objBorrower, 3.32, 3.25, 2.43, 2.50 ); // Passing in Swap, LIBOR, variable margin, and fixed margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//        //var objHECM = calculateRM(objBorrower, { tenYearICESwapRate: 3.32, oneYearLIBORRate: 3.25, marginVariable: 2.43, marginFixed: 2.50  } ); // Passing in Swap, LIBOR and margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//
+//        assert.equal(objHECM.mca, 225000);  
+//        assert.equal(objHECM.fixedEIR, 5.82, "Calculated fixed EIR incorrect.");          
+//        assert.equal(objHECM.fixedIIR, 5.82, "Calculated fixed IIR incorrect."); 
+//        
+//        assert.equal(objHECM.variableEIR, 5.75, "Calculated variable EIR incorrect.");   
+//        assert.equal(objHECM.variableIIR, 5.68, "Calculated variable IIR incorrect."); 
+//        
+//        assert.equal(objHECM.plFixed, 136800, "PL for fixed is incorrect.");
+//        assert.equal(objHECM.plVariable, 137700, "PL for variable is incorrect.");        
+//        
+//        assert.equal(objHECM.mandatoryobligations, 177800, "Mandatory obligations is incorrect.");        
+//        assert.equal(objHECM.firstYearMoneyVariable, 0, "Variable program first year cash is incorrect.");    
+//        assert.equal(objHECM.secondYearMoneyVariable, 0, "Variable program second year cash is incorrect.");             
+//        assert.equal(objHECM.firstYearMoneyFixed, 0, "Fixed program cash is incorrect.");  
+//        
+//        assert.equal(objHECM.termOrTenurePayment, 0, "Term or tenure payment is incorrect.");   
+//        
+//        assert.equal(objHECM.cashToCloseVariable, -40100, "Cash to close variable is incorrect.");   
+//        assert.equal(objHECM.cashToCloseFixed, -41000, "Cash to close fixed is incorrect.");           
+//        
+//        
+//        
+//  });  
+//});
+//
+//describe("CalculateRM Traditional Tenure Payment for 98-Year Old", function() {
+//    
+//
+//    it("TENURE PMT RETURN VALUE TEST: Age 98, $0K mortgage balance, $225,000 home value, Variable and Fixed EIR 5.82%, PLF: 71.9%.", function() {  
+//        
+//        var objBorrower = {
+//            age: 98, 
+//            propval: 225000,
+//            loanbal: 0,
+//            pipayment: 0,
+//            yearsleft: 0,
+//            state: 0,
+//            proceedsoptionindex: 2, // Tenure.
+//            ispurchase: false
+//        };
+//        
+//        var objHECM = calculateRM(objBorrower, 3.32, 3.32, 2.50, 2.50 ); // Passing in Swap, LIBOR, variable margin, and fixed margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//        //var objHECM = calculateRM(objBorrower, { tenYearICESwapRate: 3.32, oneYearLIBORRate: 3.32, marginVariable: 2.50, marginFixed: 2.50  } ); // Passing in Swap, LIBOR and margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//
+//        assert.equal(objHECM.mca, 225000);  
+//        assert.equal(objHECM.fixedEIR, 5.82, "Calculated fixed EIR incorrect.");          
+//        assert.equal(objHECM.fixedIIR, 5.82, "Calculated fixed IIR incorrect."); 
+//        
+//        assert.equal(objHECM.variableEIR, 5.82, "Calculated variable EIR incorrect.");   
+//        assert.equal(objHECM.variableIIR, 5.82, "Calculated variable IIR incorrect.");          
+//        assert.equal(objHECM.plFixed, 161775, "PL for fixed is incorrect.");
+//        assert.equal(objHECM.plVariable, 161775, "PL for variable is incorrect.");        
+//        assert.equal(objHECM.mandatoryobligations, 9800, "Mandatory obligations is incorrect.");        
+//        assert.equal(objHECM.firstYearMoneyVariable, 0, "Variable program first year cash is incorrect.");    
+//        assert.equal(objHECM.secondYearMoneyVariable, 0, "Variable program second year cash is incorrect.");             
+//        assert.equal(objHECM.firstYearMoneyFixed, 87265, "Fixed program cash is incorrect.");  
+//        assert.equal(objHECM.termOrTenurePayment, 2925, "Term or tenure payment is incorrect.");   
+//        
+//        assert.equal(objHECM.cashToCloseVariable, 0, "Cash to close variable is incorrect.");   
+//        assert.equal(objHECM.cashToCloseFixed, 0, "Cash to close fixed is incorrect.");              
+//        
+//  });  
+//});
+//
+//describe("CalculateRM Traditional 20-Year Term Payment", function() {
+//    
+//
+//    it("TERM PMT RETURN VALUE TEST: Age 72, $0K mortgage balance, $250,000 home value, Variable and Fixed EIR 5.82%, PLF: 42.2%.", function() {  
+//        
+//        var objBorrower = {
+//            age: 72, 
+//            propval: 250000,
+//            loanbal: 0,
+//            pipayment: 0,
+//            yearsleft: 0,
+//            state: 0,
+//            proceedsoptionindex: 3, // 20-Yr term.
+//            ispurchase: false
+//        };
+//        
+//        var objHECM = calculateRM(objBorrower, 3.32, 3.32, 2.50, 2.50 ); // Passing in Swap, LIBOR, variable margin, and fixed margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//        //var objHECM = calculateRM(objBorrower, { tenYearICESwapRate: 3.32, oneYearLIBORRate: 3.32, marginVariable: 2.50, marginFixed: 2.50  } ); // Passing in Swap, LIBOR and margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//
+//        assert.equal(objHECM.mca, 250000);  
+//        assert.equal(objHECM.fixedEIR, 5.82, "Calculated fixed EIR incorrect.");          
+//        assert.equal(objHECM.fixedIIR, 5.82, "Calculated fixed IIR incorrect."); 
+//        
+//        assert.equal(objHECM.variableEIR, 5.82, "Calculated variable EIR incorrect.");   
+//        assert.equal(objHECM.variableIIR, 5.82, "Calculated variable IIR incorrect.");          
+//        assert.equal(objHECM.plFixed, 107750, "PL for fixed is incorrect.");
+//        assert.equal(objHECM.plVariable, 107750, "PL for variable is incorrect.");        
+//        assert.equal(objHECM.mandatoryobligations, 10300, "Mandatory obligations is incorrect.");        
+//        assert.equal(objHECM.firstYearMoneyVariable, 0, "Variable program first year cash is incorrect.");    
+//        assert.equal(objHECM.secondYearMoneyVariable, 0, "Variable program second year cash is incorrect.");             
+//        assert.equal(objHECM.firstYearMoneyFixed, 54350, "Fixed program cash is incorrect.");  
+//        assert.equal(objHECM.termOrTenurePayment, 688, "Term or tenure payment is incorrect."); 
+//        
+//        assert.equal(objHECM.cashToCloseVariable, 0, "Cash to close variable is incorrect.");   
+//        assert.equal(objHECM.cashToCloseFixed, 0, "Cash to close fixed is incorrect.");              
+//        
+//  });  
+//});
+//
+//describe("CalculateRM Traditional Lump Sum/LOC", function() {
+//    
+//
+//    it("LUMP SUM/LOC RETURN VALUE TEST: Age 62, $0 mortgage balance, $900,000 home value, Variable and Fixed EIR 5.25%, PLF: 39.6%.", function() {  
+//        
+//        var objBorrower = {
+//            age: 62, 
+//            propval: 900000,
+//            loanbal: 0,
+//            pipayment: 0,
+//            yearsleft: 0,
+//            state: 0,
+//            proceedsoptionindex: 0,
+//            ispurchase: false            
+//        };
+//        
+//        var objHECM = calculateRM(objBorrower, 2.75, 2.50, 2.50, 2.50 ); // Passing in Swap, LIBOR, variable margin, and fixed margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//       // var objHECM = calculateRM(objBorrower, { tenYearICESwapRate: 2.75, oneYearLIBORRate: 2.50, marginVariable: 2.50, marginFixed: 2.50  } ); // Passing in Swap, LIBOR and margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//
+//        assert.equal(objHECM.mca, 822375);  
+//        assert.equal(objHECM.fixedEIR, 5.25, "Calculated fixed EIR incorrect.");          
+//        assert.equal(objHECM.fixedIIR, 5.25, "Calculated fixed IIR incorrect.");   
+//        assert.equal(objHECM.variableEIR, 5.25, "Calculated variable EIR incorrect.");   
+//        assert.equal(objHECM.variableIIR, 5.00, "Calculated variable IIR incorrect.");          
+//        assert.equal(objHECM.plFixed, 331417, "PL for fixed is incorrect.");
+//        assert.equal(objHECM.plVariable, 331417, "PL for variable is incorrect.");        
+//        assert.equal(objHECM.mandatoryobligations, 27588, "Mandatory obligations is incorrect.");        
+//        assert.equal(objHECM.firstYearMoneyVariable, 171262, "Variable program first year cash is incorrect.");    
+//        assert.equal(objHECM.secondYearMoneyVariable, 132567, "Variable program second year cash is incorrect.");             
+//        assert.equal(objHECM.firstYearMoneyFixed, 171262, "Fixed program cash is incorrect.");   
+//        
+//        assert.equal(objHECM.termOrTenurePayment, 0, "Term or tenure payment is incorrect.");   
+//        
+//        assert.equal(objHECM.cashToCloseVariable, 0, "Cash to close variable is incorrect.");   
+//        assert.equal(objHECM.cashToCloseFixed, 0, "Cash to close fixed is incorrect.");              
+//  });  
+//});
+//
+//describe("CalculateRM Traditional Lump Sum/LOC - Different EIRs for each program", function() {
+//    
+//
+//    it("LUMP SUM/LOC RETURN VALUE TEST: Age 62, $0 mortgage balance, $900,000 home value, Fixed EIR 5.25%, Variable EIR 4.75%, Fixed PLF: 39.6%, Variable PLF: 42.4%", function() {  
+//        
+//        var objBorrower = {
+//            age: 62, 
+//            propval: 900000,
+//            loanbal: 0,
+//            pipayment: 0,
+//            yearsleft: 0,
+//            state: 0,
+//            proceedsoptionindex: 0,
+//            ispurchase: false            
+//        };
+//        
+//        var objHECM = calculateRM(objBorrower, 2.75, 2.50, 2.00, 2.50 ); // Passing in Swap, LIBOR, variable margin, and fixed margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//        //var objHECM = calculateRM(objBorrower, { tenYearICESwapRate: 2.75, oneYearLIBORRate: 2.50, marginVariable: 2.00, marginFixed: 2.50  } ); // Passing in Swap, LIBOR and margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//
+//        assert.equal(objHECM.mca, 822375);  
+//        assert.equal(objHECM.fixedEIR, 5.25, "Calculated fixed EIR incorrect.");          
+//        assert.equal(objHECM.fixedIIR, 5.25, "Calculated fixed IIR incorrect."); 
+//        
+//        assert.equal(objHECM.variableEIR, 4.75, "Calculated variable EIR incorrect.");   
+//        assert.equal(objHECM.variableIIR, 4.50, "Calculated variable IIR incorrect.");          
+//        assert.equal(objHECM.plFixed, 331417, "PL for fixed is incorrect.");
+//        assert.equal(objHECM.plVariable, 354444, "PL for variable is incorrect.");        
+//        assert.equal(objHECM.mandatoryobligations, 27588, "Mandatory obligations is incorrect.");        
+//        assert.equal(objHECM.firstYearMoneyVariable, 185078, "Variable program first year cash is incorrect.");    
+//        assert.equal(objHECM.secondYearMoneyVariable, 141778, "Variable program second year cash is incorrect.");             
+//        assert.equal(objHECM.firstYearMoneyFixed, 171262, "Fixed program cash is incorrect.");   
+//        
+//        assert.equal(objHECM.termOrTenurePayment, 0, "Term or tenure payment is incorrect.");   
+//        
+//        assert.equal(objHECM.cashToCloseVariable, 0, "Cash to close variable is incorrect.");   
+//        assert.equal(objHECM.cashToCloseFixed, 0, "Cash to close fixed is incorrect.");              
+//  });  
+//});
+//
+//describe("CalculateRM Traditional Lump Sum/LOC", function() {
+//    
+//
+//    it("LUMP SUM/LOC RETURN VALUE TEST: Age 62, $70K mortgage balance, $250,000 home value, Variable and Fixed EIR 5.25%, PLF: 39.6%.", function() {  
+//        
+//        var objBorrower = {
+//            age: 62, 
+//            propval: 250000,
+//            loanbal: 70000,
+//            pipayment: 891,
+//            yearsleft: 7,
+//            state: 0,
+//            proceedsoptionindex: 0,
+//            ispurchase: false
+//        };
+//        
+//        var objHECM = calculateRM(objBorrower, 2.75, 2.50, 2.50, 2.50 ); // Passing in Swap, LIBOR, variable margin, and fixed margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//        //var objHECM = calculateRM(objBorrower, { tenYearICESwapRate: 2.75, oneYearLIBORRate: 2.50, marginVariable: 2.50, marginFixed: 2.50  } ); // Passing in Swap, LIBOR and margin. Fully-indexed rates are 5.00 and 5.25, respectively. 
+//
+//        assert.equal(objHECM.mca, 250000);  
+//        assert.equal(objHECM.fixedEIR, 5.25, "Calculated fixed EIR incorrect.");          
+//        assert.equal(objHECM.fixedIIR, 5.25, "Calculated fixed IIR incorrect."); 
+//        
+//        assert.equal(objHECM.variableEIR, 5.25, "Calculated variable EIR incorrect.");   
+//        assert.equal(objHECM.variableIIR, 5.00, "Calculated variable IIR incorrect.");          
+//        assert.equal(objHECM.plFixed, 100750, "PL for fixed is incorrect.");
+//        assert.equal(objHECM.plVariable, 100750, "PL for variable is incorrect.");        
+//        assert.equal(objHECM.mandatoryobligations, 80300, "Mandatory obligations is incorrect.");        
+//        assert.equal(objHECM.firstYearMoneyVariable, 10075, "Variable program first year cash is incorrect.");    
+//        assert.equal(objHECM.secondYearMoneyVariable, 10375, "Variable program second year cash is incorrect.");             
+//        assert.equal(objHECM.firstYearMoneyFixed, 10075, "Fixed program cash is incorrect.");  
+//        
+//        assert.equal(objHECM.termOrTenurePayment, 0, "Term or tenure payment is incorrect.");   
+//        
+//        assert.equal(objHECM.cashToCloseVariable, 0, "Cash to close variable is incorrect.");   
+//        assert.equal(objHECM.cashToCloseFixed, 0, "Cash to close fixed is incorrect.");              
+//        
+//  });  
+//});
+
+
+  </script>
+
+  <!-- the script with tests (describe, it...) -->
+  <script src="rmwidget.2.2.js"></script>
+
+  <!-- the element with id="mocha" will contain test results -->
+  <div id="mocha"></div>
+
+  <!-- run tests! -->
+  <script>
+    mocha.run();
+  </script>
+</body>
+
+</html>
