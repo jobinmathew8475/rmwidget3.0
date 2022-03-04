@@ -244,158 +244,161 @@ describe("calculateHECM", function() {
     var lendingLimit = 970800;
     
     it("Age for calculation purposes: should be 1 year older than submitted age.", function() {
-        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,false);
         assert.equal(objHECMResults.ageForCalculation, 66);
     });  
     
     it("Age for calculation purposes: max age 99.", function() {
-        var objHECMResults = calculateHECM(99,400000,135000,965,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(99,400000,135000,965,23,1,1.75,.33,false);
         assert.equal(objHECMResults.ageForCalculation, 99);
     });   
     
     it("PLF calculation test.", function() {
-        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,false);
         assert.equal(objHECMResults.fixedPLF, .497);
     });   
     
     it("MCA calculation: less than lending limit.", function() {
-        var objHECMResults = calculateHECM(64,400000,135000,965,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(64,400000,135000,965,23,1,1.75,.33,false);
         assert.equal(objHECMResults.mca, 400000);
     });     
     
     it("MCA calculation: greater than lending limit.", function() {
-        var objHECMResults = calculateHECM(64,1400000,135000,965,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(64,1400000,135000,965,23,1,1.75,.33,false);
         assert.equal(objHECMResults.mca, lendingLimit);
     });      
 
     it("PL calculation test.", function() {
-        var objHECMResults = calculateHECM(64,400000,135000,965,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(64,400000,135000,965,23,1,1.75,.33,false);
         assert.equal(objHECMResults.plFixed, 196000);
     });    
     
     it("IMIP calculation test.", function() {
-        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,false);
         assert.equal(objHECMResults.imip, 8000);
     });      
     
     it("IMIP maximum amount calculation test.", function() {
-        var objHECMResults = calculateHECM(65,1400000,135000,965,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(65,1400000,135000,965,23,1,1.75,.33,false);
         assert.equal(objHECMResults.imip, 19416);
     });      
     
     it("Origination calculation test.", function() {
-        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(65,400000,135000,965,23,1,1.75,.33,false);
         assert.equal(objHECMResults.origination, 6000);
     });      
     
     it("Origination maximum amount calculation test.", function() {
-        var objHECMResults = calculateHECM(65,1400000,135000,965,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(65,1400000,135000,965,23,1,1.75,.33,false);
         assert.equal(objHECMResults.origination, 6000);
     });      
     
     it("Origination calculation test.", function() {
-        var objHECMResults = calculateHECM(65,100000,35000,565,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(65,100000,35000,565,23,1,1.75,.33,false);
         assert.equal(objHECMResults.origination, 2000);
     });        
     
     it("Third party closing costs calculation test.", function() {
-        var objHECMResults = calculateHECM(65,100000,35000,565,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(65,100000,35000,565,23,1,1.75,.33,false);
         assert.equal(objHECMResults.thirdPartyClosingCosts, 2800);
     });       
     
     it("Third party closing costs calculation test.", function() {
-        var objHECMResults = calculateHECM(65,1000000,35000,565,23,1,1.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(65,1000000,35000,565,23,1,1.75,.33,false);
         assert.equal(objHECMResults.thirdPartyClosingCosts, 4900);
     });  
     
     it("First year variable cash/LOC calculation test.", function() {
-        var objHECMResults = calculateHECM(57,200000,0,0,0,1,0.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,0,0,0,1,0.75,.33,false);
         assert.equal(objHECMResults.firstYearMoneyVariable, 49200);
     });     
      
     it("Second year variable LOC calculation test.", function() {
-        var objHECMResults = calculateHECM(57,200000,0,0,0,1,0.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,0,0,0,1,0.75,.33,false);
         assert.equal(objHECMResults.secondYearMoneyVariable, 40000);
     });       
          
     it("First year variable LOC calculation test mandatory obligations > 60% of PL.", function() {
-        var objHECMResults = calculateHECM(57,200000,65000,568,8,1,0.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,65000,568,8,1,0.75,.33,false);
         assert.equal(objHECMResults.firstYearMoneyVariable, 10000);
     });      
          
     it("Second year variable LOC calculation test mandatory obligations > 60% of PL.", function() {
-        var objHECMResults = calculateHECM(57,200000,65000,568,8,1,0.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,65000,568,8,1,0.75,.33,false);
         assert.equal(objHECMResults.secondYearMoneyVariable, 14200);
     });     
     
     it("First year fixed cash calculation test mandatory obligations < 60% of PL.", function() {
-        var objHECMResults = calculateHECM(57,200000,0,0,0,1,0.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,0,0,0,1,0.75,.33,false);
         assert.equal(objHECMResults.firstYearMoneyFixed, 49200);
     });      
      
     it("First year fixed cash calculation test mandatory obligations < 60% of PL.", function() {
-        var objHECMResults = calculateHECM(57,200000,45000,568,8,1,0.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,45000,568,8,1,0.75,.33,false);
         assert.equal(objHECMResults.firstYearMoneyFixed, 4200);
     });   
          
     it("First year fixed cash calculation test mandatory obligations > 60% of PL.", function() {
-        var objHECMResults = calculateHECM(57,200000,65000,568,8,1,0.75,.33,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,65000,568,8,1,0.75,.33,false);
         assert.equal(objHECMResults.firstYearMoneyFixed, 10000);
     });     
           
     it("10-Year term payout.", function() {
-        var objHECMResults = calculateHECM(57,200000,0,0,0,5,0.75,0.75,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,0,0,0,5,0.75,0.75,false);
         assert.equal(objHECMResults.termOrTenurePayment, 882);
     });  
               
     it("15-Year term payout.", function() {
-        var objHECMResults = calculateHECM(57,200000,0,0,0,4,0.75,0.75,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,0,0,0,4,0.75,0.75,false);
         assert.equal(objHECMResults.termOrTenurePayment, 638);
     });     
           
     it("20-Year term payout.", function() {
-        var objHECMResults = calculateHECM(57,200000,0,0,0,3,0.75,0.75,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,0,0,0,3,0.75,0.75,false);
         assert.equal(objHECMResults.termOrTenurePayment, 517);
     });     
           
     it("Tenure payout.", function() {
-        var objHECMResults = calculateHECM(57,200000,0,0,0,2,0.75,0.75,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,0,0,0,2,0.75,0.75,false);
         assert.equal(objHECMResults.termOrTenurePayment, 335);
     });      
           
     it("Tenure payout for 96-year old.", function() {
-        var objHECMResults = calculateHECM(96,200000,0,0,0,2,0.75,0.75,2.25,false);
+        var objHECMResults = calculateHECM(96,200000,0,0,0,2,0.75,0.75,false);
         assert.equal(objHECMResults.termOrTenurePayment, 2532);
     });       
                   
     it("Purchase.", function() {
-        var objHECMResults = calculateHECM(57,200000,0,0,0,0,0.75,0.75,2.25,true);
+        var objHECMResults = calculateHECM(57,200000,0,0,0,0,0.75,0.75,true);
         assert.equal(objHECMResults.firstYearMoneyFixed, -110800);
     });        
                   
     it("Purchase.", function() {
-        var objHECMResults = calculateHECM(57,200000,0,0,0,0,0.75,0.75,2.25,true);
+        var objHECMResults = calculateHECM(57,200000,0,0,0,0,0.75,0.75,true);
         assert.equal(objHECMResults.firstYearMoneyVariable, -110800);
     });       
                   
     it("Short to close refinance HECM.", function() {
-        var objHECMResults = calculateHECM(57,200000,100000,536,28,2,0.75,0.75,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,100000,536,28,2,0.75,0.75,false);
         assert.equal(objHECMResults.firstYearMoneyFixed, -10800);
     });  
                       
     it("Short to close refinance HECM with 10-year term payout option.", function() {
-        var objHECMResults = calculateHECM(57,200000,100000,536,28,5,0.75,0.75,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,100000,536,28,5,0.75,0.75,false);
         assert.equal(objHECMResults.termOrTenurePayment, 0);
     });     
                       
     it("Testing all returned data.", function() {
-        var objHECMResults = calculateHECM(57,200000,100000,536,28,5,0.75,0.75,2.25,false);
+        var objHECMResults = calculateHECM(57,200000,100000,536,28,5,0.75,0.75,false);
         assert.equal(objHECMResults.age, 57);
         assert.equal(objHECMResults.ageForCalculation, 58);
         assert.equal(objHECMResults.variableEIR, 3.00);
         assert.equal(objHECMResults.variableIIR, 3.00);
         assert.equal(objHECMResults.fixedEIR, 3.00);
         assert.equal(objHECMResults.fixedIIR, 3.00);
+        assert.equal(objHECMResults.margin, 2.25);
+        assert.equal(objHECMResults.swapRate, .75);
+        assert.equal(objHECMResults.oneYearCMTRate, .75);        
         assert.equal(objHECMResults.variablePLF, .5);
         assert.equal(objHECMResults.fixedPLF, .5);         
         assert.equal(objHECMResults.plFixed, 100000);
@@ -415,7 +418,7 @@ describe("calculateHECM", function() {
     });  
     
     it("Testing error messaging.", function() {
-        var objHECMResults = calculateHECM(157,200000,100000,536,28,5,0.75,0.75,2.25,false);
+        var objHECMResults = calculateHECM(157,200000,100000,536,28,5,0.75,0.75,false);
         assert.equal(objHECMResults.errorMessage, 'Invalid age corrected to 62. ');
     });     
  

@@ -23,59 +23,60 @@ const OPTION_10_YEAR_PAYMENT = 5;
 const LENDING_LIMIT = 970800;
 const MIP_RATE = 0.5;
 const IMIP_RATE = .02;
+const MARGIN = 2.25;
 
 // State locations loaded into a select box.
-const STATE_AL = 0;
-const STATE_AK = 1;
-const STATE_AZ = 2;
-const STATE_AR = 3;
-const STATE_CA = 4;
-const STATE_CO = 5;
-const STATE_CT = 6;
-const STATE_DE = 7;
-const STATE_DC = 8;
-const STATE_FL = 9;
-const STATE_GA = 10;
-const STATE_HI = 11;
-const STATE_ID = 12;
-const STATE_IL = 13;
-const STATE_IN = 14;
-const STATE_IA = 15;
-const STATE_KS = 16;
-const STATE_KY = 17;
-const STATE_LA = 18;
-const STATE_ME = 19;
-const STATE_MD = 20;
-const STATE_MA = 21;
-const STATE_MI = 22;
-const STATE_MN = 23;
-const STATE_MS = 24;
-const STATE_MO = 25;
-const STATE_MT = 26;
-const STATE_NE = 27;
-const STATE_NV = 28;
-const STATE_NH = 29;
-const STATE_NJ = 30;
-const STATE_NM = 31;
-const STATE_NY = 32;
-const STATE_NC = 33;
-const STATE_ND = 34;
-const STATE_OH = 35;
-const STATE_OK = 36;
-const STATE_OR = 37;
-const STATE_PA = 38;
-const STATE_RI = 39;
-const STATE_SC = 40;
-const STATE_SD = 41;
-const STATE_TN = 42;
-const STATE_TX = 43;
-const STATE_UT = 44;
-const STATE_VT = 45;
-const STATE_VA = 46;
-const STATE_WA = 47;
-const STATE_WV = 48;
-const STATE_WI = 49;
-const STATE_WY = 50;
+//const STATE_AL = 0;
+//const STATE_AK = 1;
+//const STATE_AZ = 2;
+//const STATE_AR = 3;
+//const STATE_CA = 4;
+//const STATE_CO = 5;
+//const STATE_CT = 6;
+//const STATE_DE = 7;
+//const STATE_DC = 8;
+//const STATE_FL = 9;
+//const STATE_GA = 10;
+//const STATE_HI = 11;
+//const STATE_ID = 12;
+//const STATE_IL = 13;
+//const STATE_IN = 14;
+//const STATE_IA = 15;
+//const STATE_KS = 16;
+//const STATE_KY = 17;
+//const STATE_LA = 18;
+//const STATE_ME = 19;
+//const STATE_MD = 20;
+//const STATE_MA = 21;
+//const STATE_MI = 22;
+//const STATE_MN = 23;
+//const STATE_MS = 24;
+//const STATE_MO = 25;
+//const STATE_MT = 26;
+//const STATE_NE = 27;
+//const STATE_NV = 28;
+//const STATE_NH = 29;
+//const STATE_NJ = 30;
+//const STATE_NM = 31;
+//const STATE_NY = 32;
+//const STATE_NC = 33;
+//const STATE_ND = 34;
+//const STATE_OH = 35;
+//const STATE_OK = 36;
+//const STATE_OR = 37;
+//const STATE_PA = 38;
+//const STATE_RI = 39;
+//const STATE_SC = 40;
+//const STATE_SD = 41;
+//const STATE_TN = 42;
+//const STATE_TX = 43;
+//const STATE_UT = 44;
+//const STATE_VT = 45;
+//const STATE_VA = 46;
+//const STATE_WA = 47;
+//const STATE_WV = 48;
+//const STATE_WI = 49;
+//const STATE_WY = 50;
 
 function amortizationpurchase (isvariableprogram) {  
     
@@ -659,24 +660,24 @@ function isBoolean(val) {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-function hecmInputs() {
-    
-    this.age = 0;
-
-    this.propertyvalue = 0;
-    this.existingmortgagebalance = 0;
-    this.existingpipayment = 0;
-    this.yearsleftexistingmortgage = 0;
-    this.state = 0;
-    this.proceedsoptionindex = 0;
-    this.swaprate = 0;
-    this.oneyearcmtrate = 0;
-    this.margin = 0;
-    this.lendinglimit = 0;
-    this.ispurchase = false;  
-    
-   return this;    
-}
+//function hecmInputs() {
+//    
+//    this.age = 0;
+//
+//    this.propertyvalue = 0;
+//    this.existingmortgagebalance = 0;
+//    this.existingpipayment = 0;
+//    this.yearsleftexistingmortgage = 0;
+//    this.state = 0;
+//    this.proceedsoptionindex = 0;
+//    this.swaprate = 0;
+//    this.oneyearcmtrate = 0;
+//    this.margin = 0;
+//    this.lendinglimit = 0;
+//    this.ispurchase = false;  
+//    
+//   return this;    
+//}
 
 function validateRate ( rate ) {
     
@@ -752,8 +753,9 @@ function isValidProceedsOptionIndex(proceedsoptionindex) {
 }
 
 function calculateHECM ( age = 0, propertyValue = 0, mortgageBalance = 0, piPayment = 0, yearsLeft = 0, proceedsOptionIndex = 0, swapRate = 0, 
-    oneYearCMTRate = 0, margin = 0, isPurchase = false ) {
+    oneYearCMTRate = 0, isPurchase = false ) {
         
+    console.log('test');    
     var errorMessage = '';
     
     // Validating inputs and returning error messages as needed.
@@ -813,12 +815,12 @@ function calculateHECM ( age = 0, propertyValue = 0, mortgageBalance = 0, piPaym
         oneYearCMTRate = +(oneYearCMTRate);            
     }    
     
-    if (isValidFloatValue(margin) === false ) {
-        margin = 0;
-        errorMessage += 'Invalid margin rate value corrected to 0. ';     
-    } else {
-        margin = +(margin);           
-    }   
+//    if (isValidFloatValue(margin) === false ) {
+//        margin = 0;
+//        errorMessage += 'Invalid margin rate value corrected to 0. ';     
+//    } else {
+//        margin = +(margin);           
+//    }   
 
     // Round up to the next year when calculating proceeds. Max age 99.  
     if (age < 99) {
@@ -836,9 +838,9 @@ function calculateHECM ( age = 0, propertyValue = 0, mortgageBalance = 0, piPaym
     }
     
     // Calculating interest rates.
-    var fixedEIRandIIR = roundNumber(swapRate + margin, 2); 
-    var variableEIR = roundNumber(swapRate + margin, 2);
-    var variableIIR = roundNumber(oneYearCMTRate + margin, 2);// EIR and IIR for the variable can be different numbers. The EIR is used to calculate proceeds, the IIR is used to calculate interest accruals over time.
+    var fixedEIRandIIR = roundNumber(swapRate + MARGIN, 2); 
+    var variableEIR = roundNumber(swapRate + MARGIN, 2);
+    var variableIIR = roundNumber(oneYearCMTRate + MARGIN, 2);// EIR and IIR for the variable can be different numbers. The EIR is used to calculate proceeds, the IIR is used to calculate interest accruals over time.
 
     var fixedPLF = getPLFactor(ageForCalculation, fixedEIRandIIR/100);
     var variablePLF = getPLFactor(ageForCalculation, variableEIR/100);
@@ -969,12 +971,16 @@ function calculateHECM ( age = 0, propertyValue = 0, mortgageBalance = 0, piPaym
         fixedEIR: fixedEIRandIIR,
         fixedIIR: fixedEIRandIIR,
         variablePLF: variablePLF,
-        fixedPLF: fixedPLF,    
+        fixedPLF: fixedPLF, 
+        margin: MARGIN,
+        swapRate: swapRate,
+        oneYearCMTRate: oneYearCMTRate,
         plFixed: plFixed,
         plVariable: plVariable,
         mip: MIP_RATE,
         mca: mca,
         mortgagebalance: mortgageBalance,
+        piPayment: piPayment,
         imip: imip,
         origination: orig,
         thirdPartyClosingCosts: closingCosts,
@@ -996,235 +1002,235 @@ function calculateHECM ( age = 0, propertyValue = 0, mortgageBalance = 0, piPaym
 /////////////////////////////////////////////////////////////////////////////////////////
 
 
-function Borrower() {
-    
-    this.age = 0;
-    this.propval = 0;
-    this.loanbal = 0;
-    this.pipayment = 0;
-    this.yearsleftonmtg = 0;
-    this.state = 0;
-    this.proceedsoptionindex = 0;
-    this.ispurchase = false;  
-    
-   return this;    
-}
+//function Borrower() {
+//    
+//    this.age = 0;
+//    this.propval = 0;
+//    this.loanbal = 0;
+//    this.pipayment = 0;
+//    this.yearsleftonmtg = 0;
+//    this.state = 0;
+//    this.proceedsoptionindex = 0;
+//    this.ispurchase = false;  
+//    
+//   return this;    
+//}
 
 
 
-function loadBwrAndCalculateRM( isHECMPurchase ) {
-    
-    var isPurchaseTemp;
-
-    // If value passed in isn't a valid boolean, assume this is a traditional HECM (not a purchase).
-    if (isBoolean(isHECMPurchase) === false) {
-        isPurchaseTemp = false;
-    } else {
-        isPurchaseTemp = isHECMPurchase;
-    }   
-    
-    var objBorrower = {
-        age: validateAge(store.get("age")) , 
-        propval: validateCurrency(store.get("propval")),
-        loanbal: validateCurrency(store.get("loanbal")),
-        pipayment: validateCurrency(store.get("pipayment")),
-        yearsleft: validateYearsLeft(store.get("yearsleft")),
-        state: validateStateLocationIndex(store.get("state")),
-        proceedsoptionindex: validateProceedsOptionIndex(store.get("paymentoptions")), // Tenure.
-        ispurchase: isPurchaseTemp
-    };
-
-    var objHECM = calculateRM ( objBorrower );
-    var ltv = 0;
-
-    // Updating form fields with variable-rate program data.
-    document.getElementById("program").innerHTML = "Variable"; 
-    document.getElementById("index").innerHTML = "1-Year CMT";
-
-    var iir = objHECM.variableIIR;
-    document.getElementById("iir").innerHTML = iir.toFixed(2) + "%";   // Convert to string with 2 decimal places.
-    document.getElementById("mip").innerHTML = objHECM.mip.toFixed(2) + "%";
-
-    var totalInterest = iir + objHECM.mip;
-    document.getElementById("totalinterest").innerHTML = totalInterest.toFixed(2) + "%";  
-    store.set('totalinterest', totalInterest/100);
-
-    ltv = parseInt(objHECM.plVariable) / parseInt(objBorrower.propval) * 100;
-    ltv = ltv.toFixed(1) + "%"; 
-    document.getElementById("pllabel").innerHTML = "Principal limit (LTV " + ltv + "):";
-    document.getElementById("pl").innerHTML = formatMoney(objHECM.plVariable, $, 0);
-
-    document.getElementById("imip").innerHTML = "-" + formatMoney(objHECM.imip, $, 0); 
-    document.getElementById("orig").innerHTML = "-" + formatMoney(objHECM.origination, $, 0);
-    document.getElementById("closingcosts").innerHTML = "-" + formatMoney(objHECM.thirdPartyClosingCosts, $, 0); 
-
-    // Updating form fields with fixed-rate program data.
-    document.getElementById("program2").innerHTML = "Fixed"; 
-    document.getElementById("index2").innerHTML = "N/A";  
-        
-    iir = objHECM.fixedIIR;
-    document.getElementById("iir2").innerHTML = iir.toFixed(2) + "%";   // Convert to string with 2 decimal places.
-    document.getElementById("mip2").innerHTML = objHECM.mip.toFixed(2) + "%";  
-            
-    totalInterest = iir + objHECM.mip;
-    document.getElementById("totalinterest2").innerHTML = totalInterest.toFixed(2) + "%";    
-    store.set('totalinterestfixed', totalInterest/100);  
-
-    ltv = parseInt(objHECM.plFixed) / parseInt(objBorrower.propval) * 100;
-    ltv = ltv.toFixed(1) + "%"; 
-    document.getElementById("pllabel").innerHTML = "Principal limit (LTV " + ltv + "):";
-    document.getElementById("pl2").innerHTML = formatMoney(objHECM.plFixed, $, 0);  
-    
-    document.getElementById("imip2").innerHTML = "-" + formatMoney(objHECM.imip, $, 0); 
-    document.getElementById("orig2").innerHTML = "-" + formatMoney(objHECM.origination, $, 0);
-    document.getElementById("closingcosts2").innerHTML = "-" + formatMoney(objHECM.thirdPartyClosingCosts, $, 0); 
-    
-    if (objHECM.isPurchase === false ) {
-
-        // Mortgage balance fields. Will show as negative number if a mortgage balance since it reduces net proceeds. 
-        if (objHECM.mortgagebalance > 0) {        
-            document.getElementById("mortgagepayoff").innerHTML = "-" + formatMoney(objHECM.mortgagebalance, $, 0);   
-        } else {
-            document.getElementById("mortgagepayoff").innerHTML = "$0";  // No mortgage balance, so make sure it doesn't show a negative zero, just zero.
-        }
-        
-        // If short to close, display it to user. EIR is the same for both programs, so if short to close, it will be the same amount for both programs. Displaying variable program
-        // values regardless of selected program. 
-        if ((objHECM.plVariable - objHECM.mandatoryobligations) < 0 ) {
-            document.getElementById("netpl").innerHTML = "-" + formatMoney(Math.abs(objHECM.plVariable - objHECM.mandatoryobligations), $, 0); 
-            document.getElementById("netpl").style.color = "#FFA0A0";
-
-            // Adding STC message to DOM structure for the sake user clarity.
-            var parentdiv = document.getElementById("netpltotal");
-            var stcdiv = document.createElement( 'div' );
-            stcdiv.innerHTML = "Short to close! You'll need to bring in " + formatMoney(Math.abs(objHECM.plVariable - objHECM.mandatoryobligations), $, 0) + " to close." ;
-            stcdiv.id = "stclabel";
-            stcdiv.class = "pagecalcline";
-            parentdiv.parentNode.insertBefore(stcdiv, parentdiv.nextSibling);
-
-        } else {  // Not short to close, so display net PL, which is the same value for both variable and fixed, so pulling from variable program data here. 
-
-            document.getElementById("netpl").innerHTML = formatMoney(objHECM.plVariable - objHECM.mandatoryobligations, $, 0); 
-        }
-        
-        document.getElementById("cash1styear").innerHTML = formatMoney(objHECM.firstYearMoneyVariable, $, 0);
-        document.getElementById("cash2ndyear").innerHTML = formatMoney(objHECM.secondYearMoneyVariable, $, 0);
-        document.getElementById("totalcash").innerHTML = formatMoney(objHECM.firstYearMoneyVariable + objHECM.secondYearMoneyVariable, $, 0);
-        
-        document.getElementById("paymentsavings").innerHTML = formatMoney(objBorrower.pipayment, $, 0);   
-        document.getElementById("addedincome").innerHTML = formatMoney(objHECM.termOrTenurePayment, $, 0);  
-        document.getElementById("totaladdedcashflow").innerHTML = formatMoney(parseInt(objBorrower.pipayment) + parseInt(objHECM.termOrTenurePayment), $, 0);        
-        
-        // Displaying fixed-rate program values. 
-        document.getElementById("mortgagepayoff2").innerHTML = formatMoney(objHECM.mortgagebalance, $, 0);  
-        
-        document.getElementById("cash1styear2").innerHTML = formatMoney(objHECM.firstYearMoneyFixed, $, 0);
-        document.getElementById("cash2ndyear2").innerHTML = "N/A"; // No second year cash for fixed program.
-        document.getElementById("totalcash2").innerHTML = formatMoney(objHECM.firstYearMoneyFixed, $, 0);        
-
-        document.getElementById("paymentsavings2").innerHTML = formatMoney(objBorrower.pipayment, $, 0);   
-        document.getElementById("addedincome2").innerHTML = "N/A" 
-        document.getElementById("totaladdedcashflow2").innerHTML = formatMoney(objBorrower.pipayment, $, 0);   
-        
-        if ( objBorrower.proceedsoptionindex === OPTION_LUMP_SUM_AND_LOC ) {
-
-            store.set('startingbalance', objHECM.mandatoryobligations + objHECM.firstYearMoneyVariable);
-            store.set('totalloc', objHECM.secondYearMoneyVariable);
-
-            document.getElementById("cashfirstyearlabel").innerHTML = "Lump sum at closing:"; 
-            document.getElementById("cashsecondyearlabel").innerHTML = "Add'l line of credit after one year:"; 
-
-        } else {
-
-            store.set('startingbalance', objHECM.mandatoryobligations);
-            store.set('totalloc', objHECM.firstYearMoneyVariable + objHECM.secondYearMoneyVariable);
-
-            switch(objBorrower.proceedsoptionindex) {
-                case OPTION_LIFETIME_PAYMENT:
-                    document.getElementById("addedincomelabel").innerHTML = "Lifetime guaranteed tenure income:"; 
-                    break;
-                case OPTION_20_YEAR_PAYMENT:
-                    document.getElementById("addedincomelabel").innerHTML = "20-year term income:"; 
-                    break;
-                case OPTION_15_YEAR_PAYMENT:
-                    document.getElementById("addedincomelabel").innerHTML = "15-year term income:"; 
-                    break;
-                case OPTION_10_YEAR_PAYMENT:
-                    document.getElementById("addedincomelabel").innerHTML = "10-year term income:"; 
-                    break;
-                case OPTION_LOC_ONLY:
-                    document.getElementById("cashfirstyearlabel").innerHTML = "Line of credit at closing:"; 
-                    document.getElementById("cashsecondyearlabel").innerHTML = "Add'l line of credit after one year:";
-                    break;
-                default:                
-            }        
-        }            
-  
-        store.set('mortgagebalance', objHECM.mortgagebalance);
-        store.set('pipayment', objBorrower.pipayment);
-        store.set('yearsleft', objBorrower.yearsleft);    
-
-
-        // Storing chart values for variable program. 
-        store.set('cashatclosing', objHECM.firstYearMoneyVariable);
-        store.set('secondyearcash', objHECM.secondYearMoneyVariable);
-        store.set('equityreserve', objBorrower.propval - objHECM.imip - objHECM.origination - objHECM.thirdPartyClosingCosts - objHECM.mortgagebalance - objHECM.firstYearMoneyVariable - objHECM.secondYearMoneyVariable);
-
-        // Storing non-redundant chart values for fixed program.
-        store.set('startingbalancefixed', objHECM.mandatoryobligations + objHECM.firstYearMoneyFixed);
-        store.set('cashatclosingfixed', objHECM.firstYearMoneyFixed);
-        store.set('equityreservefixed', objBorrower.propval - objHECM.imip - objHECM.origination - objHECM.thirdPartyClosingCosts - objHECM.mortgagebalance - objHECM.firstYearMoneyFixed);        
-
-    } else {   // Is purchase. Displaying down payment amount.
-
-        document.getElementById("purchaseprice").innerHTML = "-" + formatMoney(objBorrower.propval, $, 0); 
-        document.getElementById("purchaseprice2").innerHTML = "-" + formatMoney(objBorrower.propval, $, 0); 
-
-        document.getElementById("netpl").innerHTML = formatMoney(objHECM.plVariable - objHECM.mandatoryobligations, $, 0); 
-        document.getElementById("netpl2").innerHTML = formatMoney(objHECM.plFixed - objHECM.mandatoryobligations, $, 0); 
-        
-        document.getElementById("downpayment").innerHTML = "Cash to close is: " + formatMoney(Math.abs(objHECM.plVariable - objHECM.mandatoryobligations), $, 0);
-        document.getElementById("downpayment2").innerHTML = "Cash to close is: " + formatMoney(Math.abs(objHECM.plFixed - objHECM.mandatoryobligations), $, 0);
-
-        store.set('plvariable', objHECM.plVariable);
-
-    }
-    
-    store.set('age', objBorrower.age);
-    store.set('propval', objBorrower.propval);    
-    store.set('totalclosingcosts', objHECM.imip +  objHECM.origination + objHECM.thirdPartyClosingCosts);
-    store.set('ispurchase', objBorrower.ispurchase);
-}
-
-function HECM() {
-
-    this.variableEIR = 0;
-    this.variableIIR = 0;
-    this.fixedEIR = 0;
-    this.fixedIIR = 0;
-    this.plFactorVariable = 0;
-    this.plFactorFixed = 0;    
-    this.plFixed = 0;
-    this.plVariable = 0;
-    this.ltv = 0;
-    this.mip = 0.50;
-    this.mca = 0;
-    this.mortgagebalance = 0;
-    this.imip = 0;
-    this.origination = 0;
-    this.thirdPartyClosingCosts = 0;
-    this.mandatoryobligations = 0;
-    this.firstYearMoneyVariable = 0;
-    this.secondYearMoneyVariable = 0;
-    this.firstYearMoneyFixed = 0;  // No second year money on the fixed program.
-    this.termOrTenurePayment = 0;  // Term or tenure only on variable.
-    this.cashToCloseVariable = 0;
-    this.cashToCloseFixed = 0;
-    this.isPurchase = false;   
-    this.errorMessage = '';
-    
-   return this;      
-};
+//function loadBwrAndCalculateRM( isHECMPurchase ) {
+//    
+//    var isPurchaseTemp;
+//
+//    // If value passed in isn't a valid boolean, assume this is a traditional HECM (not a purchase).
+//    if (isBoolean(isHECMPurchase) === false) {
+//        isPurchaseTemp = false;
+//    } else {
+//        isPurchaseTemp = isHECMPurchase;
+//    }   
+//    
+//    var objBorrower = {
+//        age: validateAge(store.get("age")) , 
+//        propval: validateCurrency(store.get("propval")),
+//        loanbal: validateCurrency(store.get("loanbal")),
+//        pipayment: validateCurrency(store.get("pipayment")),
+//        yearsleft: validateYearsLeft(store.get("yearsleft")),
+//        state: validateStateLocationIndex(store.get("state")),
+//        proceedsoptionindex: validateProceedsOptionIndex(store.get("paymentoptions")), // Tenure.
+//        ispurchase: isPurchaseTemp
+//    };
+//
+//    var objHECM = calculateRM ( objBorrower );
+//    var ltv = 0;
+//
+//    // Updating form fields with variable-rate program data.
+//    document.getElementById("program").innerHTML = "Variable"; 
+//    document.getElementById("index").innerHTML = "1-Year CMT";
+//
+//    var iir = objHECM.variableIIR;
+//    document.getElementById("iir").innerHTML = iir.toFixed(2) + "%";   // Convert to string with 2 decimal places.
+//    document.getElementById("mip").innerHTML = objHECM.mip.toFixed(2) + "%";
+//
+//    var totalInterest = iir + objHECM.mip;
+//    document.getElementById("totalinterest").innerHTML = totalInterest.toFixed(2) + "%";  
+//    store.set('totalinterest', totalInterest/100);
+//
+//    ltv = parseInt(objHECM.plVariable) / parseInt(objBorrower.propval) * 100;
+//    ltv = ltv.toFixed(1) + "%"; 
+//    document.getElementById("pllabel").innerHTML = "Principal limit (LTV " + ltv + "):";
+//    document.getElementById("pl").innerHTML = formatMoney(objHECM.plVariable, $, 0);
+//
+//    document.getElementById("imip").innerHTML = "-" + formatMoney(objHECM.imip, $, 0); 
+//    document.getElementById("orig").innerHTML = "-" + formatMoney(objHECM.origination, $, 0);
+//    document.getElementById("closingcosts").innerHTML = "-" + formatMoney(objHECM.thirdPartyClosingCosts, $, 0); 
+//
+//    // Updating form fields with fixed-rate program data.
+//    document.getElementById("program2").innerHTML = "Fixed"; 
+//    document.getElementById("index2").innerHTML = "N/A";  
+//        
+//    iir = objHECM.fixedIIR;
+//    document.getElementById("iir2").innerHTML = iir.toFixed(2) + "%";   // Convert to string with 2 decimal places.
+//    document.getElementById("mip2").innerHTML = objHECM.mip.toFixed(2) + "%";  
+//            
+//    totalInterest = iir + objHECM.mip;
+//    document.getElementById("totalinterest2").innerHTML = totalInterest.toFixed(2) + "%";    
+//    store.set('totalinterestfixed', totalInterest/100);  
+//
+//    ltv = parseInt(objHECM.plFixed) / parseInt(objBorrower.propval) * 100;
+//    ltv = ltv.toFixed(1) + "%"; 
+//    document.getElementById("pllabel").innerHTML = "Principal limit (LTV " + ltv + "):";
+//    document.getElementById("pl2").innerHTML = formatMoney(objHECM.plFixed, $, 0);  
+//    
+//    document.getElementById("imip2").innerHTML = "-" + formatMoney(objHECM.imip, $, 0); 
+//    document.getElementById("orig2").innerHTML = "-" + formatMoney(objHECM.origination, $, 0);
+//    document.getElementById("closingcosts2").innerHTML = "-" + formatMoney(objHECM.thirdPartyClosingCosts, $, 0); 
+//    
+//    if (objHECM.isPurchase === false ) {
+//
+//        // Mortgage balance fields. Will show as negative number if a mortgage balance since it reduces net proceeds. 
+//        if (objHECM.mortgagebalance > 0) {        
+//            document.getElementById("mortgagepayoff").innerHTML = "-" + formatMoney(objHECM.mortgagebalance, $, 0);   
+//        } else {
+//            document.getElementById("mortgagepayoff").innerHTML = "$0";  // No mortgage balance, so make sure it doesn't show a negative zero, just zero.
+//        }
+//        
+//        // If short to close, display it to user. EIR is the same for both programs, so if short to close, it will be the same amount for both programs. Displaying variable program
+//        // values regardless of selected program. 
+//        if ((objHECM.plVariable - objHECM.mandatoryobligations) < 0 ) {
+//            document.getElementById("netpl").innerHTML = "-" + formatMoney(Math.abs(objHECM.plVariable - objHECM.mandatoryobligations), $, 0); 
+//            document.getElementById("netpl").style.color = "#FFA0A0";
+//
+//            // Adding STC message to DOM structure for the sake user clarity.
+//            var parentdiv = document.getElementById("netpltotal");
+//            var stcdiv = document.createElement( 'div' );
+//            stcdiv.innerHTML = "Short to close! You'll need to bring in " + formatMoney(Math.abs(objHECM.plVariable - objHECM.mandatoryobligations), $, 0) + " to close." ;
+//            stcdiv.id = "stclabel";
+//            stcdiv.class = "pagecalcline";
+//            parentdiv.parentNode.insertBefore(stcdiv, parentdiv.nextSibling);
+//
+//        } else {  // Not short to close, so display net PL, which is the same value for both variable and fixed, so pulling from variable program data here. 
+//
+//            document.getElementById("netpl").innerHTML = formatMoney(objHECM.plVariable - objHECM.mandatoryobligations, $, 0); 
+//        }
+//        
+//        document.getElementById("cash1styear").innerHTML = formatMoney(objHECM.firstYearMoneyVariable, $, 0);
+//        document.getElementById("cash2ndyear").innerHTML = formatMoney(objHECM.secondYearMoneyVariable, $, 0);
+//        document.getElementById("totalcash").innerHTML = formatMoney(objHECM.firstYearMoneyVariable + objHECM.secondYearMoneyVariable, $, 0);
+//        
+//        document.getElementById("paymentsavings").innerHTML = formatMoney(objBorrower.pipayment, $, 0);   
+//        document.getElementById("addedincome").innerHTML = formatMoney(objHECM.termOrTenurePayment, $, 0);  
+//        document.getElementById("totaladdedcashflow").innerHTML = formatMoney(parseInt(objBorrower.pipayment) + parseInt(objHECM.termOrTenurePayment), $, 0);        
+//        
+//        // Displaying fixed-rate program values. 
+//        document.getElementById("mortgagepayoff2").innerHTML = formatMoney(objHECM.mortgagebalance, $, 0);  
+//        
+//        document.getElementById("cash1styear2").innerHTML = formatMoney(objHECM.firstYearMoneyFixed, $, 0);
+//        document.getElementById("cash2ndyear2").innerHTML = "N/A"; // No second year cash for fixed program.
+//        document.getElementById("totalcash2").innerHTML = formatMoney(objHECM.firstYearMoneyFixed, $, 0);        
+//
+//        document.getElementById("paymentsavings2").innerHTML = formatMoney(objBorrower.pipayment, $, 0);   
+//        document.getElementById("addedincome2").innerHTML = "N/A" 
+//        document.getElementById("totaladdedcashflow2").innerHTML = formatMoney(objBorrower.pipayment, $, 0);   
+//        
+//        if ( objBorrower.proceedsoptionindex === OPTION_LUMP_SUM_AND_LOC ) {
+//
+//            store.set('startingbalance', objHECM.mandatoryobligations + objHECM.firstYearMoneyVariable);
+//            store.set('totalloc', objHECM.secondYearMoneyVariable);
+//
+//            document.getElementById("cashfirstyearlabel").innerHTML = "Lump sum at closing:"; 
+//            document.getElementById("cashsecondyearlabel").innerHTML = "Add'l line of credit after one year:"; 
+//
+//        } else {
+//
+//            store.set('startingbalance', objHECM.mandatoryobligations);
+//            store.set('totalloc', objHECM.firstYearMoneyVariable + objHECM.secondYearMoneyVariable);
+//
+//            switch(objBorrower.proceedsoptionindex) {
+//                case OPTION_LIFETIME_PAYMENT:
+//                    document.getElementById("addedincomelabel").innerHTML = "Lifetime guaranteed tenure income:"; 
+//                    break;
+//                case OPTION_20_YEAR_PAYMENT:
+//                    document.getElementById("addedincomelabel").innerHTML = "20-year term income:"; 
+//                    break;
+//                case OPTION_15_YEAR_PAYMENT:
+//                    document.getElementById("addedincomelabel").innerHTML = "15-year term income:"; 
+//                    break;
+//                case OPTION_10_YEAR_PAYMENT:
+//                    document.getElementById("addedincomelabel").innerHTML = "10-year term income:"; 
+//                    break;
+//                case OPTION_LOC_ONLY:
+//                    document.getElementById("cashfirstyearlabel").innerHTML = "Line of credit at closing:"; 
+//                    document.getElementById("cashsecondyearlabel").innerHTML = "Add'l line of credit after one year:";
+//                    break;
+//                default:                
+//            }        
+//        }            
+//  
+//        store.set('mortgagebalance', objHECM.mortgagebalance);
+//        store.set('pipayment', objBorrower.pipayment);
+//        store.set('yearsleft', objBorrower.yearsleft);    
+//
+//
+//        // Storing chart values for variable program. 
+//        store.set('cashatclosing', objHECM.firstYearMoneyVariable);
+//        store.set('secondyearcash', objHECM.secondYearMoneyVariable);
+//        store.set('equityreserve', objBorrower.propval - objHECM.imip - objHECM.origination - objHECM.thirdPartyClosingCosts - objHECM.mortgagebalance - objHECM.firstYearMoneyVariable - objHECM.secondYearMoneyVariable);
+//
+//        // Storing non-redundant chart values for fixed program.
+//        store.set('startingbalancefixed', objHECM.mandatoryobligations + objHECM.firstYearMoneyFixed);
+//        store.set('cashatclosingfixed', objHECM.firstYearMoneyFixed);
+//        store.set('equityreservefixed', objBorrower.propval - objHECM.imip - objHECM.origination - objHECM.thirdPartyClosingCosts - objHECM.mortgagebalance - objHECM.firstYearMoneyFixed);        
+//
+//    } else {   // Is purchase. Displaying down payment amount.
+//
+//        document.getElementById("purchaseprice").innerHTML = "-" + formatMoney(objBorrower.propval, $, 0); 
+//        document.getElementById("purchaseprice2").innerHTML = "-" + formatMoney(objBorrower.propval, $, 0); 
+//
+//        document.getElementById("netpl").innerHTML = formatMoney(objHECM.plVariable - objHECM.mandatoryobligations, $, 0); 
+//        document.getElementById("netpl2").innerHTML = formatMoney(objHECM.plFixed - objHECM.mandatoryobligations, $, 0); 
+//        
+//        document.getElementById("downpayment").innerHTML = "Cash to close is: " + formatMoney(Math.abs(objHECM.plVariable - objHECM.mandatoryobligations), $, 0);
+//        document.getElementById("downpayment2").innerHTML = "Cash to close is: " + formatMoney(Math.abs(objHECM.plFixed - objHECM.mandatoryobligations), $, 0);
+//
+//        store.set('plvariable', objHECM.plVariable);
+//
+//    }
+//    
+//    store.set('age', objBorrower.age);
+//    store.set('propval', objBorrower.propval);    
+//    store.set('totalclosingcosts', objHECM.imip +  objHECM.origination + objHECM.thirdPartyClosingCosts);
+//    store.set('ispurchase', objBorrower.ispurchase);
+//}
+//
+//function HECM() {
+//
+//    this.variableEIR = 0;
+//    this.variableIIR = 0;
+//    this.fixedEIR = 0;
+//    this.fixedIIR = 0;
+//    this.plFactorVariable = 0;
+//    this.plFactorFixed = 0;    
+//    this.plFixed = 0;
+//    this.plVariable = 0;
+//    this.ltv = 0;
+//    this.mip = 0.50;
+//    this.mca = 0;
+//    this.mortgagebalance = 0;
+//    this.imip = 0;
+//    this.origination = 0;
+//    this.thirdPartyClosingCosts = 0;
+//    this.mandatoryobligations = 0;
+//    this.firstYearMoneyVariable = 0;
+//    this.secondYearMoneyVariable = 0;
+//    this.firstYearMoneyFixed = 0;  // No second year money on the fixed program.
+//    this.termOrTenurePayment = 0;  // Term or tenure only on variable.
+//    this.cashToCloseVariable = 0;
+//    this.cashToCloseFixed = 0;
+//    this.isPurchase = false;   
+//    this.errorMessage = '';
+//    
+//   return this;      
+//};
 
 function calculatePrincipalLimit ( age, propval, eir ) {
 
@@ -1246,238 +1252,238 @@ function calculatePrincipalLimit ( age, propval, eir ) {
     
 }
 
-function calculateRM(objBorrower, tenYearICESwapRate = 0, oneYearLIBORRate = 0, marginVariable = 0, marginFixed = 0) {
-    
-    // 10-Year Swap Rate and 1-Year LIBOR Rate variables are for testing purposes. 
-    // If they're passed in, the function will default to those values to calculate HECM proceeds. Otherwise, they're left as zeroes.   
-    if (tenYearICESwapRate == null) {
-        tenYearICESwapRate = 0;
-    }
-    
-    if (oneYearLIBORRate == null) {
-        oneYearLIBORRate = 0;
-    }
-    
-    if (marginVariable == null) {
-        marginVariable = 0;
-    }
-    
-    if (marginFixed == null) {
-        marginFixed = 0;
-    }        
-    
-    var objHECM = new HECM();
-    
-    let age = objBorrower.age + 1;
-    if (age > 99) {
-        age = 99;
-    }
-
-    let propval = objBorrower.propval;
-    let loanbal = objBorrower.loanbal;
-    let pipayment = objBorrower.pipayment;
-    let yearsleft = objBorrower.yearsleftonmtg;
-    let state = objBorrower.state;
-    let selectedProceedsOptionIndex = objBorrower.proceedsoptionindex;
-    let ispurchase = objBorrower.ispurchase;
-    
-    var mca = getFHALoanLimit();
-    if (propval < mca) {
-        mca = propval;
-    }
-    
-    objHECM.mca = mca;
-
-    var swapRate = 0;
-    var liborRate = 0;
-
-    // If a swap rate wasn't passed in (for testing purposes), then load the live value. 
-    if ( tenYearICESwapRate === 0 ) {
-        swapRate = getSwapRate();        
-    } else {
-        swapRate = tenYearICESwapRate;
-    }
-
-//    store.set('swapRate', swapRate);
-    
-    // If a LIBOR rate wasn't passed in (for testing purposes), then load the live value. 
-    if ( oneYearLIBORRate === 0 ) {
-        liborRate = get1YearLIBORRate();
-    } else {
-        liborRate = oneYearLIBORRate;
-    }
-
-//    store.set('liborRate', liborRate);
- 
-    if (marginVariable === 0) {
-        marginVariable = getMargin();
-    }
-    
-    if (marginFixed === 0) {
-        marginFixed = getMargin();
-    }   
-
-//    console.log("MCA: " +  mca);
-//    console.log ("Age: " + age);
-//    console.log ("Swap: " + swapRate);
-//    console.log ("Margin Fixed: " + marginFixed);
-//    console.log ("Margin Variable: " + marginVariable);
-    
-    // EIR is used to calculate the benefit amount for both loan programs. The EIR matches the note rate (IIR) for the fixed
-    // program. The note rate can be different than the EIR for the variable program. 
-    var fixedEIRandIIR = roundNumber(parseFloat(swapRate) + parseFloat(marginFixed), 2); // EIR and IIR are the same for the fixed rate program.
-    var variableEIR = roundNumber(parseFloat(swapRate) + parseFloat(marginVariable), 2);
-    var variableIIR = roundNumber(parseFloat(liborRate) +parseFloat( marginVariable), 2);// EIR and IIR for the variable can be different numbers. The EIR is used to calculate proceeds, the IIR is used to calculate interest accruals over time.
-
-//    console.log ("Fixed EIR: " + fixedEIRandIIR);
-//    console.log ("Variable EIR: " + variableEIR);
-
-    objHECM.fixedEIR = fixedEIRandIIR;
-    objHECM.fixedIIR = fixedEIRandIIR;
-    objHECM.variableEIR = variableEIR;
-    objHECM.variableIIR = variableIIR;
-    
-     // Grabbing PL Factor based on the EIR to determine initial loan-to-value for each program.
-    var principalLimitFixed = roundNumber(mca * (getPLFactor(age, fixedEIRandIIR/100)), 0);  
-    var principalLimitVariable = roundNumber(mca * (getPLFactor(age, variableEIR/100)), 0); 
-    
-    objHECM.plFixed = principalLimitFixed;
-    objHECM.plVariable = principalLimitVariable;
-    
-    // If this is a purchase HECM, setting the mortgage balance to the value of the property will trigger the correct 
-    // cash to close calculation for both programs.
-    if (ispurchase === true) {
-        loanbal = propval;  
-        objHECM.isPurchase = true;  
-    }
-    
-    // Calculating closing costs.
-    var imip = getIMIP(propval);
-    var orig = getOrig(propval);
-    var closingcosts = get3rdPartyCosts(propval);
-    
-    objHECM.imip = imip;
-    objHECM.origination = orig;
-    objHECM.thirdPartyClosingCosts = closingcosts;
-    objHECM.mortgagebalance = loanbal;
-
-    // Calculating mandatory obligations, which impacts how much cash/LOC can be taken the first year.
-    var mandatoryobs = parseInt(loanbal) + parseInt(orig) + parseInt(closingcosts) + parseInt(imip);
-    
-    objHECM.mandatoryobligations = mandatoryobs;
-    
-    // Calculating the variable program first. If the mandatory obligations are higher than the principal limit, borrower needs to bring in
-    // cash to closing. This will be the case for purchase HECMs.
-    if (mandatoryobs > principalLimitVariable) {
-        
-        objHECM.cashToCloseVariable = principalLimitVariable - mandatoryobs;
-        store.set("cashToCloseVariable", objHECM.cashToCloseVariable); // Used by the chart.
-        
-    } else {
-
-        objHECM.cashToCloseVariable = 0;
-        store.set("cashToCloseVariable", objHECM.cashToCloseVariable); // Used by the chart.
-        
-        // If a term or tenure payment has been selected, need to calculate the net principal limit first 
-        // so we know how much cash is available for term or tenure payments. Minimum term is 5 years.
-        if (selectedProceedsOptionIndex === OPTION_LIFETIME_PAYMENT || selectedProceedsOptionIndex === OPTION_20_YEAR_PAYMENT || selectedProceedsOptionIndex === OPTION_15_YEAR_PAYMENT || selectedProceedsOptionIndex === OPTION_10_YEAR_PAYMENT ) {
-
-            let term;
-            let netpl = principalLimitVariable - mandatoryobs; // The net amount available after mandatory obligations (mortgages and closing costs) are paid.
-
-            // Grabbing payment option for calculating a term or tenure payment.
-            switch(selectedProceedsOptionIndex) {
-                case OPTION_LIFETIME_PAYMENT:
-                    term = 100 - age;
-                    break;
-                case OPTION_20_YEAR_PAYMENT:
-                    term = 20;
-                    break;
-                case OPTION_15_YEAR_PAYMENT:
-                    term = 15;
-                    break;
-                case OPTION_10_YEAR_PAYMENT:
-                    term = 10;
-                    break;
-                default:
-                    term = 0;
-            }
-
-            // Minimum term is five years, regardless of age.
-            if (term < 5) {
-                term = 5;
-            }
-
-            // Calculating the monthly payment based on the available money, rate, and term.              
-            objHECM.termOrTenurePayment = calculatepayment(netpl, variableEIR, term);  
-            store.set('monthlypayment', objHECM.termOrTenurePayment);
-
-        } else {
-
-            store.set('monthlypayment', 0);
-
-            // Cash/LOC or LOC was selected. Not all of the money is available right away, so need to calculate availability based on the mandatory obligations.
-            var firstYearMoneyVariable = roundNumber(0.6 * principalLimitVariable,0);
-            var secondYearMoneyVariable = roundNumber(0.4 * principalLimitVariable, 0);
-
-            // If mandatory obligations are more than 60% of the principal limit, then borrower can take extra 10% of the principal limit up to the principal limit. 
-            if (mandatoryobs > firstYearMoneyVariable) {
-
-                // Once you're over the 60% of the principal limit, you can take out another 10% max.
-                firstYearMoneyVariable =  roundNumber(0.1 * principalLimitVariable, 0);  
-
-                // If the mandatory obligations and first year limit exceed the principal limit, chop it back down and no cash is available the second year.
-                if ((mandatoryobs + firstYearMoneyVariable) > principalLimitVariable) {
-                    firstYearMoneyVariable = principalLimitVariable - mandatoryobs;
-                    secondYearMoneyVariable = 0; 
-                } else {
-                    secondYearMoneyVariable = principalLimitVariable - firstYearMoneyVariable - mandatoryobs;
-                }
-
-            } else {
-                firstYearMoneyVariable = firstYearMoneyVariable - mandatoryobs;
-            } 
-
-            objHECM.firstYearMoneyVariable  = firstYearMoneyVariable;
-            objHECM.secondYearMoneyVariable = secondYearMoneyVariable;  
-
-        }     
-    }
-    
-    // Calculating the fixed program. If the mandatory obligations are higher than the principal limit, borrower needs to bring in
-    // cash to closing. This will be the case for purchase HECMs.
-    if (mandatoryobs > principalLimitFixed) {
-    
-        objHECM.cashToCloseFixed = principalLimitFixed - mandatoryobs;
-        store.set("cashToCloseFixed", objHECM.cashToCloseFixed); // Used by the chart.
-        
-    } else {
-
-        objHECM.cashToCloseFixed = 0;
-        store.set("cashToCloseFixed", objHECM.cashToCloseFixed); // Used by the chart.
-        
-        var firstYearMoneyFixed = roundNumber(0.6 * principalLimitFixed, 0);
-
-        // If mandatory obligations are more than 60% of the principal limit, then can take an extra 10% and that's it (not to exceed the principal limit). 
-        if (mandatoryobs > firstYearMoneyFixed) {
-
-            // Once you're over the 60% of the principal limit, you can take out another 10% max.
-            firstYearMoneyFixed =  roundNumber(0.1 * principalLimitFixed, 0);  
-
-            // If the mandatory obligations and first year limit exceed the principal limit, chop it back down. No cash is available the second year on the fixed program.
-            if ((mandatoryobs + firstYearMoneyFixed) > principalLimitFixed) {
-                firstYearMoneyFixed = principalLimitFixed - mandatoryobs;
-            }
-
-        } else {
-            firstYearMoneyFixed = firstYearMoneyFixed - mandatoryobs;
-        }     
-
-        objHECM.firstYearMoneyFixed = firstYearMoneyFixed;
-    }
-          
-    return objHECM;
-}
+//function calculateRM(objBorrower, tenYearICESwapRate = 0, oneYearLIBORRate = 0, marginVariable = 0, marginFixed = 0) {
+//    
+//    // 10-Year Swap Rate and 1-Year LIBOR Rate variables are for testing purposes. 
+//    // If they're passed in, the function will default to those values to calculate HECM proceeds. Otherwise, they're left as zeroes.   
+//    if (tenYearICESwapRate == null) {
+//        tenYearICESwapRate = 0;
+//    }
+//    
+//    if (oneYearLIBORRate == null) {
+//        oneYearLIBORRate = 0;
+//    }
+//    
+//    if (marginVariable == null) {
+//        marginVariable = 0;
+//    }
+//    
+//    if (marginFixed == null) {
+//        marginFixed = 0;
+//    }        
+//    
+//    var objHECM = new HECM();
+//    
+//    let age = objBorrower.age + 1;
+//    if (age > 99) {
+//        age = 99;
+//    }
+//
+//    let propval = objBorrower.propval;
+//    let loanbal = objBorrower.loanbal;
+//    let pipayment = objBorrower.pipayment;
+//    let yearsleft = objBorrower.yearsleftonmtg;
+//    let state = objBorrower.state;
+//    let selectedProceedsOptionIndex = objBorrower.proceedsoptionindex;
+//    let ispurchase = objBorrower.ispurchase;
+//    
+//    var mca = getFHALoanLimit();
+//    if (propval < mca) {
+//        mca = propval;
+//    }
+//    
+//    objHECM.mca = mca;
+//
+//    var swapRate = 0;
+//    var liborRate = 0;
+//
+//    // If a swap rate wasn't passed in (for testing purposes), then load the live value. 
+//    if ( tenYearICESwapRate === 0 ) {
+//        swapRate = getSwapRate();        
+//    } else {
+//        swapRate = tenYearICESwapRate;
+//    }
+//
+////    store.set('swapRate', swapRate);
+//    
+//    // If a LIBOR rate wasn't passed in (for testing purposes), then load the live value. 
+//    if ( oneYearLIBORRate === 0 ) {
+//        liborRate = get1YearLIBORRate();
+//    } else {
+//        liborRate = oneYearLIBORRate;
+//    }
+//
+////    store.set('liborRate', liborRate);
+// 
+//    if (marginVariable === 0) {
+//        marginVariable = getMargin();
+//    }
+//    
+//    if (marginFixed === 0) {
+//        marginFixed = getMargin();
+//    }   
+//
+////    console.log("MCA: " +  mca);
+////    console.log ("Age: " + age);
+////    console.log ("Swap: " + swapRate);
+////    console.log ("Margin Fixed: " + marginFixed);
+////    console.log ("Margin Variable: " + marginVariable);
+//    
+//    // EIR is used to calculate the benefit amount for both loan programs. The EIR matches the note rate (IIR) for the fixed
+//    // program. The note rate can be different than the EIR for the variable program. 
+//    var fixedEIRandIIR = roundNumber(parseFloat(swapRate) + parseFloat(marginFixed), 2); // EIR and IIR are the same for the fixed rate program.
+//    var variableEIR = roundNumber(parseFloat(swapRate) + parseFloat(marginVariable), 2);
+//    var variableIIR = roundNumber(parseFloat(liborRate) +parseFloat( marginVariable), 2);// EIR and IIR for the variable can be different numbers. The EIR is used to calculate proceeds, the IIR is used to calculate interest accruals over time.
+//
+////    console.log ("Fixed EIR: " + fixedEIRandIIR);
+////    console.log ("Variable EIR: " + variableEIR);
+//
+//    objHECM.fixedEIR = fixedEIRandIIR;
+//    objHECM.fixedIIR = fixedEIRandIIR;
+//    objHECM.variableEIR = variableEIR;
+//    objHECM.variableIIR = variableIIR;
+//    
+//     // Grabbing PL Factor based on the EIR to determine initial loan-to-value for each program.
+//    var principalLimitFixed = roundNumber(mca * (getPLFactor(age, fixedEIRandIIR/100)), 0);  
+//    var principalLimitVariable = roundNumber(mca * (getPLFactor(age, variableEIR/100)), 0); 
+//    
+//    objHECM.plFixed = principalLimitFixed;
+//    objHECM.plVariable = principalLimitVariable;
+//    
+//    // If this is a purchase HECM, setting the mortgage balance to the value of the property will trigger the correct 
+//    // cash to close calculation for both programs.
+//    if (ispurchase === true) {
+//        loanbal = propval;  
+//        objHECM.isPurchase = true;  
+//    }
+//    
+//    // Calculating closing costs.
+//    var imip = getIMIP(propval);
+//    var orig = getOrig(propval);
+//    var closingcosts = get3rdPartyCosts(propval);
+//    
+//    objHECM.imip = imip;
+//    objHECM.origination = orig;
+//    objHECM.thirdPartyClosingCosts = closingcosts;
+//    objHECM.mortgagebalance = loanbal;
+//
+//    // Calculating mandatory obligations, which impacts how much cash/LOC can be taken the first year.
+//    var mandatoryobs = parseInt(loanbal) + parseInt(orig) + parseInt(closingcosts) + parseInt(imip);
+//    
+//    objHECM.mandatoryobligations = mandatoryobs;
+//    
+//    // Calculating the variable program first. If the mandatory obligations are higher than the principal limit, borrower needs to bring in
+//    // cash to closing. This will be the case for purchase HECMs.
+//    if (mandatoryobs > principalLimitVariable) {
+//        
+//        objHECM.cashToCloseVariable = principalLimitVariable - mandatoryobs;
+//        store.set("cashToCloseVariable", objHECM.cashToCloseVariable); // Used by the chart.
+//        
+//    } else {
+//
+//        objHECM.cashToCloseVariable = 0;
+//        store.set("cashToCloseVariable", objHECM.cashToCloseVariable); // Used by the chart.
+//        
+//        // If a term or tenure payment has been selected, need to calculate the net principal limit first 
+//        // so we know how much cash is available for term or tenure payments. Minimum term is 5 years.
+//        if (selectedProceedsOptionIndex === OPTION_LIFETIME_PAYMENT || selectedProceedsOptionIndex === OPTION_20_YEAR_PAYMENT || selectedProceedsOptionIndex === OPTION_15_YEAR_PAYMENT || selectedProceedsOptionIndex === OPTION_10_YEAR_PAYMENT ) {
+//
+//            let term;
+//            let netpl = principalLimitVariable - mandatoryobs; // The net amount available after mandatory obligations (mortgages and closing costs) are paid.
+//
+//            // Grabbing payment option for calculating a term or tenure payment.
+//            switch(selectedProceedsOptionIndex) {
+//                case OPTION_LIFETIME_PAYMENT:
+//                    term = 100 - age;
+//                    break;
+//                case OPTION_20_YEAR_PAYMENT:
+//                    term = 20;
+//                    break;
+//                case OPTION_15_YEAR_PAYMENT:
+//                    term = 15;
+//                    break;
+//                case OPTION_10_YEAR_PAYMENT:
+//                    term = 10;
+//                    break;
+//                default:
+//                    term = 0;
+//            }
+//
+//            // Minimum term is five years, regardless of age.
+//            if (term < 5) {
+//                term = 5;
+//            }
+//
+//            // Calculating the monthly payment based on the available money, rate, and term.              
+//            objHECM.termOrTenurePayment = calculatepayment(netpl, variableEIR, term);  
+//            store.set('monthlypayment', objHECM.termOrTenurePayment);
+//
+//        } else {
+//
+//            store.set('monthlypayment', 0);
+//
+//            // Cash/LOC or LOC was selected. Not all of the money is available right away, so need to calculate availability based on the mandatory obligations.
+//            var firstYearMoneyVariable = roundNumber(0.6 * principalLimitVariable,0);
+//            var secondYearMoneyVariable = roundNumber(0.4 * principalLimitVariable, 0);
+//
+//            // If mandatory obligations are more than 60% of the principal limit, then borrower can take extra 10% of the principal limit up to the principal limit. 
+//            if (mandatoryobs > firstYearMoneyVariable) {
+//
+//                // Once you're over the 60% of the principal limit, you can take out another 10% max.
+//                firstYearMoneyVariable =  roundNumber(0.1 * principalLimitVariable, 0);  
+//
+//                // If the mandatory obligations and first year limit exceed the principal limit, chop it back down and no cash is available the second year.
+//                if ((mandatoryobs + firstYearMoneyVariable) > principalLimitVariable) {
+//                    firstYearMoneyVariable = principalLimitVariable - mandatoryobs;
+//                    secondYearMoneyVariable = 0; 
+//                } else {
+//                    secondYearMoneyVariable = principalLimitVariable - firstYearMoneyVariable - mandatoryobs;
+//                }
+//
+//            } else {
+//                firstYearMoneyVariable = firstYearMoneyVariable - mandatoryobs;
+//            } 
+//
+//            objHECM.firstYearMoneyVariable  = firstYearMoneyVariable;
+//            objHECM.secondYearMoneyVariable = secondYearMoneyVariable;  
+//
+//        }     
+//    }
+//    
+//    // Calculating the fixed program. If the mandatory obligations are higher than the principal limit, borrower needs to bring in
+//    // cash to closing. This will be the case for purchase HECMs.
+//    if (mandatoryobs > principalLimitFixed) {
+//    
+//        objHECM.cashToCloseFixed = principalLimitFixed - mandatoryobs;
+//        store.set("cashToCloseFixed", objHECM.cashToCloseFixed); // Used by the chart.
+//        
+//    } else {
+//
+//        objHECM.cashToCloseFixed = 0;
+//        store.set("cashToCloseFixed", objHECM.cashToCloseFixed); // Used by the chart.
+//        
+//        var firstYearMoneyFixed = roundNumber(0.6 * principalLimitFixed, 0);
+//
+//        // If mandatory obligations are more than 60% of the principal limit, then can take an extra 10% and that's it (not to exceed the principal limit). 
+//        if (mandatoryobs > firstYearMoneyFixed) {
+//
+//            // Once you're over the 60% of the principal limit, you can take out another 10% max.
+//            firstYearMoneyFixed =  roundNumber(0.1 * principalLimitFixed, 0);  
+//
+//            // If the mandatory obligations and first year limit exceed the principal limit, chop it back down. No cash is available the second year on the fixed program.
+//            if ((mandatoryobs + firstYearMoneyFixed) > principalLimitFixed) {
+//                firstYearMoneyFixed = principalLimitFixed - mandatoryobs;
+//            }
+//
+//        } else {
+//            firstYearMoneyFixed = firstYearMoneyFixed - mandatoryobs;
+//        }     
+//
+//        objHECM.firstYearMoneyFixed = firstYearMoneyFixed;
+//    }
+//          
+//    return objHECM;
+//}
 
 function calculatepayment(npl, annualinterest, terminyears) {
     // Get the user's input from the form. Assume it is all valid.
@@ -1659,78 +1665,79 @@ function validateStateLocationIndex (value) {
     return tempValue; 
 }
 
-function age_change () {
+function myh_age_change () {
     
     // Making sure we have a valid numeric age within the correct range of 18-99.
-    var age = validateAge(document.getElementById("age").value);
+    var age = validateAge(document.getElementById("myh_age").value);
    
     // Returning scrubbed value to the form and storing for later use.
-    document.getElementById("age").value = age;
+    document.getElementById("myh_age").value = age;
     store.set('age', age);   
+    
 }
 
-function propval_change () {
+function myh_propertyvalue_change () {
 
-    var propval = validateCurrency(document.getElementById("propval").value);
+    var propertyValue = validateCurrency(document.getElementById("myh_propertyvalue").value);
     
     // Returning the scrubbed and formatted value to the form and storing a plain version of the number.
-    document.getElementById("propval").value = formatMoney(propval, $,0);   
-    store.set('propval', propval); 
+    document.getElementById("myh_propertyvalue").value = formatMoney(propertyValue,$,0);   
+    store.set('propertyvalue', propertyValue); 
 
 }
 
-function loanbal_change () {
+function myh_mortgagebalance_change () {
     
-    var loanbal = validateCurrency(document.getElementById("loanbal").value);
+    var mortgageBalance = validateCurrency(document.getElementById("myh_mortgagebalance").value);
     
     // Returning the scrubbed and formatted value to the form and storing a plain version of the number.
-    document.getElementById("loanbal").value = formatMoney(loanbal, $,0);   
-    store.set('loanbal', loanbal);  
+    document.getElementById("myh_mortgagebalance").value = formatMoney(mortgageBalance, $,0);   
+    store.set('mortgagebalance', mortgageBalance);  
     
 }
 
-function pipayment_change () {
+function myh_pipayment_change () {
     
-    var pipayment = validateCurrency(document.getElementById("pipayment").value);
+    var piPayment = validateCurrency(document.getElementById("myh_pipayment").value);
     
     // Returning the scrubbed and formatted value to the form and storing a plain version of the number.
-    document.getElementById("pipayment").value = formatMoney(pipayment, $,0);   
-    store.set('pipayment', pipayment);  
+    document.getElementById("myh_pipayment").value = formatMoney(piPayment, $,0);   
+    store.set('pipayment', piPayment);  
     
 }
 
-function stateloc_change () {
-
-    var stateloc = validateStateLocationIndex(document.getElementById('stateloc').selectedIndex);
-   
-    store.set('stateloc', stateloc);
-};
+//function stateloc_change () {
+//
+//    var stateloc = validateStateLocationIndex(document.getElementById('stateloc').selectedIndex);
+//   
+//    store.set('stateloc', stateloc);
+//};
 
 function paymentoptions_change () {
     // This function is called by the main calculator on MyHECM.com.
     
-    var paymentoptions = validateProceedsOptionIndex(document.getElementById('paymentoptions').selectedIndex);
+    var paymentOptions = validateProceedsOptionIndex(document.getElementById('myh_paymentoptions').selectedIndex);
 
-    store.set('paymentoptions', paymentoptions);   
+    store.set('paymentoptions', paymentOptions);   
 }
 
 function yearsleft_change () {
     // This function is called by the main calculator on MyHECM.com.
     
     // Grabbing and scrubbing the mortgage years left. 
-    var yearsleft =  validateYearsLeft(document.getElementById("yearsleft").value);
+    var yearsLeft =  validateYearsLeft(document.getElementById("myh_yearsleft").value);
 
     // Returning scrubbed value to the form and storing for later use.
-    document.getElementById("yearsleft").value = yearsleft;
-    store.set('yearsleft', yearsleft);    
+    document.getElementById("yearsleft").value = yearsLeft;
+    store.set('yearsleft', yearsLeft);    
 }
 
 function homeappreciation_change () {
     // This function is called by the main calculator on MyHECM.com.
     
-    var homeappreciation = document.getElementById('homeappreciation').selectedIndex;
+    var homeAppreciation = document.getElementById('myh_homeappreciation').selectedIndex;
 
-    store.set('homeappreciation', homeappreciation);   
+    store.set('homeappreciation', homeAppreciation);   
 }
 
 function getPLFactor(age, rate) {
@@ -15858,4 +15865,220 @@ function getPLFactor(age, rate) {
         break;
     }
     return pl;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////      Functions for Embeddable Javascript Calculator                                          ///////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function myh_outputCalcFields() {
+    
+    // Creating parent wrapper for calculator.
+    document.write('<div id="myh_js_calc_wrapper"></div>');
+    var parentDiv = document.getElementById("myh_js_calc_wrapper");
+    
+    // Creating wrapper for the input screen.
+    var div = document.createElement("div");
+    div.setAttribute("id", "myh_js_calc_input_wrapper");
+    parentDiv.appendChild(div);
+    
+    // Creating fields for input screen.
+    myh_addInputBox ('Enter age of youngest borrower: ', 'myh_age', 'myh_age_change()', 'myh_js_calc_input_wrapper');
+    myh_addInputBox ('Enter your home\'s value: ', 'myh_propertyvalue', 'myh_propertyvalue_change()', 'myh_js_calc_input_wrapper');
+    myh_addInputBox ('Total mortgage balance(s) owed: ', 'myh_mortgagebalance', 'myh_mortgagebalance_change()', 'myh_js_calc_input_wrapper');
+    myh_addInputBox ('Total principal and interest payment(s): ', 'myh_pipayment', 'myh_pipayment_change()', 'myh_js_calc_input_wrapper');
+    myh_addProceedsOptionSelectBox ( 'Select how to receive proceeds: ', 'myh_js_calc_input_wrapper' );
+    myh_addButton ('Calculate', 'myh_js_calc_input_wrapper');
+    
+    // Populating field values on input screen.
+    document.getElementById('myh_age').value = validateAge(store.get('age'));
+    document.getElementById('myh_propertyvalue').value = formatMoney(store.get('propertyvalue'),$,0);  
+    document.getElementById('myh_mortgagebalance').value = formatMoney(store.get('mortgagebalance'),$,0);  
+    document.getElementById('myh_pipayment').value = formatMoney(store.get('pipayment'),$,0);      
+
+}
+
+
+function myh_addInputBox(labelText, inputName, onBlurFunction, parentDiv ) {
+    
+    var wrapperDiv = document.createElement("div");
+    wrapperDiv.className = "myh_jscalcinput";
+    
+    var parentElement = document.getElementById(parentDiv);   
+    parentElement.appendChild(wrapperDiv);    
+
+    var newElement = document.createElement("input");
+
+    var label = document.createElement("Label");
+    label.innerHTML = labelText;     
+
+    newElement.setAttribute("type", "text");
+    newElement.setAttribute("value", "");
+    newElement.setAttribute("name", inputName);
+    newElement.setAttribute("id", inputName);  
+    newElement.setAttribute("onblur", onBlurFunction);    
+    //element.setAttribute("style", "width:200px");
+
+    //label.setAttribute("style", "font-weight:normal");
+
+   // var parentElement = document.getElementById(parentDiv);
+
+    wrapperDiv.appendChild(label);
+    wrapperDiv.appendChild(newElement);
+    
+}
+
+function myh_addProceedsOptionSelectBox ( labelText, parentDiv )
+{
+    var wrapperDiv = document.createElement("div");
+    wrapperDiv.className = "myh_jscalcinput";
+    
+    var parentElement = document.getElementById(parentDiv);   
+    parentElement.appendChild(wrapperDiv); 
+    
+    var label = document.createElement("Label");
+    label.innerHTML = labelText;      
+
+    var selectElement = document.createElement ("select");
+    var selectOptionText = '';
+    
+    for (var i=0;i < 5;i++)
+    {
+        switch (i) {
+            case 0:
+                selectOptionText = "Lump Sum/LOC";
+                break;
+            case 1:
+                selectOptionText = "LOC Only";
+                break;
+            case 2:
+                selectOptionText = "Lifetime Income";
+                break;
+            case 3:
+                selectOptionText = "20-Year Income";
+                break;
+            case 4:
+                selectOptionText = "15-Year Income";
+                break;
+            case 5:
+                selectOptionText = "10-Year Income";
+                break;
+        }
+        var option = new Option (selectOptionText);
+        selectElement.options[selectElement.options.length] = option;
+    }
+    wrapperDiv.appendChild(label);
+    wrapperDiv.appendChild (selectElement);
+}
+
+function myh_addButton( labelText, parentDiv ) {
+    
+    var wrapperDiv = document.createElement("div");
+    wrapperDiv.className = "myh_jscalcinput";
+    
+    var parentElement = document.getElementById(parentDiv);   
+    parentElement.appendChild(wrapperDiv); 
+    
+    var btn = document.createElement("BUTTON");
+    var text = document.createTextNode(labelText);
+
+    //btn.setAttribute("style","color:red;font-size:23px");
+
+    btn.appendChild(text);
+    parentElement.appendChild(btn);
+    
+    btn.setAttribute("onclick", "jsCalculateHECM()"); 
+
+}
+
+function myh_addResultsLabel ( labelText, labelResultsText, parentDiv ) {
+    
+    var wrapperDiv = document.createElement("div");
+    wrapperDiv.className = "myh_jscalcinput";
+    
+    var parentElement = document.getElementById(parentDiv);   
+    parentElement.appendChild(wrapperDiv);  
+    
+    var label = document.createElement("div");
+    label.className = "myh_jscalcresultslabel";
+    label.setAttribute("style", "width:50%; float:left;");  
+    label.innerHTML = labelText;    
+    
+    var labelResults = document.createElement("div");
+    labelResults.className = "myh_jscalcresults";
+    labelResults.setAttribute("style", "width:50%; float:left; text-align: center;");      
+    labelResults.innerHTML = labelResultsText;  
+    
+    wrapperDiv.appendChild(label);
+    wrapperDiv.appendChild(labelResults);
+    
+}
+
+function myh_addDescTitle ( descriptionText, parentElementID, isTitle = false ) {
+    
+    var element = document.createElement("div");
+    
+    if (isTitle === true) {
+        element.className = "myh_js_calc_desc title";
+    } else {
+        element.className = "myh_js_calc_desc";
+    }
+    
+    element.innerHTML = descriptionText;  
+  
+    var parentElement = document.getElementById(parentElementID);
+    parentElement.appendChild(element);     
+}
+
+function jsCalculateHECM () {
+
+    var age = store.get('age'); 
+    var propertyValue = store.get('propertyvalue'); 
+    var mortgageBalance = store.get('mortgagebalance');  
+    var piPayment = store.get('pipayment');  
+    var paymentOptions = store.get('paymentoptions');   
+    var yearsLeft = store.get('yearsleft');  
+    var homeAppreciation = store.get('homeappreciation');   
+    
+    var objHECM = calculateHECM(age,propertyValue,mortgageBalance,piPayment,yearsLeft,paymentOptions,getSwap(),get1YearCMT());
+    console.log (JSON.stringify(objHECM));
+    
+    // Creating wrapper for variable output screen.
+    var parentDiv = document.getElementById("myh_js_calc_wrapper");
+    var div = document.createElement("div");
+    div.setAttribute("id", "myh_js_calc_output_wrapper_variable");
+    parentDiv.appendChild(div);    
+
+    // Outputting variable results. 
+    myh_addResultsLabel ('Interest Rate Index:', '1-Year CMT', 'myh_js_calc_output_wrapper_variable' );
+    myh_addResultsLabel ('Estimated initial interest rate (IIR):', objHECM.variableIIR.toFixed(2) + "%", 'myh_js_calc_output_wrapper_variable' );
+    myh_addResultsLabel ('Mortgage insurance (MIP):', objHECM.mip.toFixed(2) + "%", 'myh_js_calc_output_wrapper_variable' );
+    myh_addResultsLabel ('ESTIMATED TOTAL RATE:', (objHECM.variableIIR + objHECM.mip).toFixed(2) + "%", 'myh_js_calc_output_wrapper_variable' );
+    if (objHECM.piPayment > 0) {
+        myh_addDescTitle ("• Eliminate mortgage payment, which saves you " + formatMoney(objHECM.piPayment,$,0) + "/month.", 'myh_js_calc_output_wrapper_variable', true );
+        myh_addDescTitle ("Your mortgage payment will be eliminated, saving you " + formatMoney(objHECM.piPayment,$,0) + "/month and " + formatMoney(objHECM.piPayment * 12,$,0) + " per year. You remain the owner of your home, so you'll continue paying property taxes and homeowner's insurance.", 'myh_js_calc_output_wrapper_variable', false );
+    }    
+    myh_addDescTitle ('• Line of credit at closing: ' + formatMoney(objHECM.firstYearMoneyVariable,$,0), 'myh_js_calc_output_wrapper_variable', true );
+    myh_addDescTitle ("You\'ll receive an estimated line of credit of " + formatMoney(objHECM.firstYearMoneyVariable,$,0) + " at closing, which can be used whatever you like (pay off bills, home improvements, etc.). The available credit will grow at an estimated annual rate of " + (objHECM.variableIIR + objHECM.mip).toFixed(2) + "%.", 'myh_js_calc_output_wrapper_variable' , false );
+    myh_addDescTitle ('• Additional line of credit at one year: ' + formatMoney(objHECM.secondYearMoneyVariable,$,0), 'myh_js_calc_output_wrapper_variable', true );
+    myh_addDescTitle ("You\'ll receive an additional line of credit in one year in the estimated amount of " + formatMoney(objHECM.secondYearMoneyVariable,$,0) + ". The available credit will grow at an estimated annual rate of " + (objHECM.variableIIR + objHECM.mip).toFixed(2) + "%.", 'myh_js_calc_output_wrapper_variable', false );
+ 
+    // Outputting fixed results.
+    div = document.createElement("div");
+    div.setAttribute("id", "myh_js_calc_output_wrapper_fixed");
+    parentDiv.appendChild(div);       
+    
+    myh_addResultsLabel ('Interest Rate Index:', 'N/A', 'myh_js_calc_output_wrapper_fixed' );
+    myh_addResultsLabel ('Estimated initial interest rate (IIR):', objHECM.fixedIIR.toFixed(2) + "%", 'myh_js_calc_output_wrapper_fixed' );  
+    myh_addResultsLabel ('Mortgage insurance (MIP):', objHECM.mip.toFixed(2) + "%", 'myh_js_calc_output_wrapper_fixed' );
+    myh_addResultsLabel ('ESTIMATED TOTAL RATE:', (objHECM.fixedIIR + objHECM.mip).toFixed(2) + "%", 'myh_js_calc_output_wrapper_fixed' );    
+    
+    if (objHECM.piPayment > 0) {
+        myh_addDescTitle ("• Eliminate mortgage payment, which saves you " + formatMoney(objHECM.piPayment,$,0) + "/month.", 'myh_js_calc_output_wrapper_fixed', true );
+        myh_addDescTitle ("Your mortgage payment will be eliminated, saving you " + formatMoney(objHECM.piPayment,$,0) + "/month and " + formatMoney(objHECM.piPayment * 12,$,0) + " per year. You remain the owner of your home, so you'll continue paying property taxes and homeowner's insurance.", 'myh_js_calc_output_wrapper_fixed', false );
+    }   
+    
+    myh_addDescTitle ('• Lump sum at closing: ' + formatMoney(objHECM.firstYearMoneyFixed,$,0), 'myh_js_calc_output_wrapper_fixed', true );
+    myh_addDescTitle ("You\'ll receive an estimated lump sum payout of " + formatMoney(objHECM.firstYearMoneyFixed,$,0) + " at closing, which can be used whatever you like (pay off bills, home improvements, etc.).", 'myh_js_calc_output_wrapper_fixed' , false );
 }

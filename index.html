@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+<title>Our Funky HTML Page</title>
+<meta name="description" content="Our first page">
+<meta name="keywords" content="html tutorial template">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script src="accounting.js"></script>
+<script async src="store.min.js"></script>
+<script async src="rmwidgettest.js"></script>
+<script async src="rmwidgetrates.js"></script>
+<script async src="rmwidget3.0.js"></script>
+
+</head>
+<body>
+    Age: <input id = "myh_age" name="age" type="text" onblur="myh_age_change()"><br>
+    Home Value: <input id="myh_propertyvalue" name="propertyvalue" type="text" onblur="myh_propertyvalue_change()">
+    <button onclick="calc()">Calculate</button>
+    
+    <script>
+        function calc() {
+            age = document.getElementById('age').value;
+            propertyvalue = document.getElementById('propertyvalue').value;
+            calculateHECM (age, propertyvalue);
+            
+            
+        }
+        
+        window.onload = function() {
+            myh_outputCalcFields();            
+            
+
+//            var paymentOptions = store.get('paymentoptions');   
+//            var yearsLeft = store.get('yearsleft');  
+//            var homeAppreciation = store.get('homeappreciation');  
+        };
+        
+    </script>
+    
+</body>
+</html>
