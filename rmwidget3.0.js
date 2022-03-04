@@ -15874,13 +15874,19 @@ function getPLFactor(age, rate) {
 
 function myh_outputCalcFields() {
     
-    // Creating parent wrapper for calculator.
-    document.write('<div id="myh_js_calc_wrapper"></div>');
-    var parentDiv = document.getElementById("myh_js_calc_wrapper");
+    document.write('<div id="myh_js_calc"></div>');
+        
+    var div = document.createElement("div");
+    div.setAttribute("id", "myh_js_calc_wrapper");
+    var parentDiv = document.getElementById("myh_js_calc");
+    parentDiv.setAttribute("style", "overflow:hidden;");
+    parentDiv.appendChild(div);
     
     // Creating wrapper for the input screen.
     var div = document.createElement("div");
     div.setAttribute("id", "myh_js_calc_input_wrapper");
+    div.setAttribute("style", "top:0; left:0; visibility: visible; transition: visibility .5s, opacity 0.5s linear; position:absolute;");  
+    parentDiv = document.getElementById("myh_js_calc_wrapper");    
     parentDiv.appendChild(div);
     
     // Creating fields for input screen.
@@ -15895,7 +15901,21 @@ function myh_outputCalcFields() {
     document.getElementById('myh_age').value = validateAge(store.get('age'));
     document.getElementById('myh_propertyvalue').value = formatMoney(store.get('propertyvalue'),$,0);  
     document.getElementById('myh_mortgagebalance').value = formatMoney(store.get('mortgagebalance'),$,0);  
-    document.getElementById('myh_pipayment').value = formatMoney(store.get('pipayment'),$,0);      
+    document.getElementById('myh_pipayment').value = formatMoney(store.get('pipayment'),$,0);  
+    
+    // Creating wrapper div for Switch to Fixed link.
+    div = document.createElement("div");
+    div.setAttribute("id", "myh_calc_hecm"); 
+    document.getElementById("myh_js_calc").appendChild(div); 
+    
+    // Outputting link.
+    var a = document.createElement('a');     
+    var linkText = document.createTextNode("Calculate");
+    a.appendChild(linkText); 
+    a.title = "Calculate"; 
+    a.href = "#"; 
+    a.setAttribute('onclick', 'jsCalculateHECM()');
+    document.getElementById("myh_calc_hecm").appendChild(a);     
 
 }
 
@@ -16048,6 +16068,7 @@ function jsCalculateHECM () {
     var parentDiv = document.getElementById("myh_js_calc_wrapper");
     var div = document.createElement("div");
     div.setAttribute("id", "myh_js_calc_output_wrapper_variable");
+     div.setAttribute("style", "top:0; left:0; visibility: hidden; transition: visibility .5s, opacity 0.5s linear; position:absolute;");     
     parentDiv.appendChild(div);    
 
     // Outputting variable results. 
@@ -16055,6 +16076,22 @@ function jsCalculateHECM () {
     myh_addResultsLabel ('Estimated initial interest rate (IIR):', objHECM.variableIIR.toFixed(2) + "%", 'myh_js_calc_output_wrapper_variable' );
     myh_addResultsLabel ('Mortgage insurance (MIP):', objHECM.mip.toFixed(2) + "%", 'myh_js_calc_output_wrapper_variable' );
     myh_addResultsLabel ('ESTIMATED TOTAL RATE:', (objHECM.variableIIR + objHECM.mip).toFixed(2) + "%", 'myh_js_calc_output_wrapper_variable' );
+   
+    // Creating wrapper div for Switch to Fixed link.
+    div = document.createElement("div");
+    div.setAttribute("id", "myh_calc_switch_to_fixed_link"); 
+    document.getElementById("myh_js_calc_output_wrapper_variable").appendChild(div); 
+    
+    // Outputting link.
+    var a = document.createElement('a');     
+    var linkText = document.createTextNode("Switch to Fixed");
+    a.appendChild(linkText); 
+    a.title = "Switch to Fixed"; 
+    a.href = "#"; 
+    a.setAttribute('onclick', 'myhFadeToFixedResults()');
+    document.getElementById("myh_calc_switch_to_fixed_link").appendChild(a); 
+   
+    // Outputting variable rate HECM benefits.
     if (objHECM.piPayment > 0) {
         myh_addDescTitle ("• Eliminate mortgage payment, which saves you " + formatMoney(objHECM.piPayment,$,0) + "/month.", 'myh_js_calc_output_wrapper_variable', true );
         myh_addDescTitle ("Your mortgage payment will be eliminated, saving you " + formatMoney(objHECM.piPayment,$,0) + "/month and " + formatMoney(objHECM.piPayment * 12,$,0) + " per year. You remain the owner of your home, so you'll continue paying property taxes and homeowner's insurance.", 'myh_js_calc_output_wrapper_variable', false );
@@ -16063,10 +16100,12 @@ function jsCalculateHECM () {
     myh_addDescTitle ("You\'ll receive an estimated line of credit of " + formatMoney(objHECM.firstYearMoneyVariable,$,0) + " at closing, which can be used whatever you like (pay off bills, home improvements, etc.). The available credit will grow at an estimated annual rate of " + (objHECM.variableIIR + objHECM.mip).toFixed(2) + "%.", 'myh_js_calc_output_wrapper_variable' , false );
     myh_addDescTitle ('• Additional line of credit at one year: ' + formatMoney(objHECM.secondYearMoneyVariable,$,0), 'myh_js_calc_output_wrapper_variable', true );
     myh_addDescTitle ("You\'ll receive an additional line of credit in one year in the estimated amount of " + formatMoney(objHECM.secondYearMoneyVariable,$,0) + ". The available credit will grow at an estimated annual rate of " + (objHECM.variableIIR + objHECM.mip).toFixed(2) + "%.", 'myh_js_calc_output_wrapper_variable', false );
- 
+    //myh_addDescTitle ('<a href="#" id="myh_link_switch_to_fixed" onclick="myh>Switch to Fixed</a>', 'myh_js_calc_output_wrapper_variable', true ); 
+    
     // Outputting fixed results.
     div = document.createElement("div");
     div.setAttribute("id", "myh_js_calc_output_wrapper_fixed");
+     div.setAttribute("style", "top:0; left:0; visibility: hidden; transition: visibility .5s, opacity 0.5s linear; position:absolute;");        
     parentDiv.appendChild(div);       
     
     myh_addResultsLabel ('Interest Rate Index:', 'N/A', 'myh_js_calc_output_wrapper_fixed' );
@@ -16074,6 +16113,21 @@ function jsCalculateHECM () {
     myh_addResultsLabel ('Mortgage insurance (MIP):', objHECM.mip.toFixed(2) + "%", 'myh_js_calc_output_wrapper_fixed' );
     myh_addResultsLabel ('ESTIMATED TOTAL RATE:', (objHECM.fixedIIR + objHECM.mip).toFixed(2) + "%", 'myh_js_calc_output_wrapper_fixed' );    
     
+     // Creating wrapper div for Switch to Fixed link.
+    div = document.createElement("div");
+    div.setAttribute("id", "myh_calc_switch_to_variable_link"); 
+    document.getElementById("myh_js_calc_output_wrapper_fixed").appendChild(div); 
+    
+    // Creating link.
+    var a = document.createElement('a');     
+    var linkText = document.createTextNode("Switch to Variable");
+    a.appendChild(linkText); 
+    a.title = "Switch to Variable"; 
+    a.href = "#"; 
+    a.setAttribute('onclick', 'myhFadeToVariableResults()');
+    document.getElementById("myh_calc_switch_to_variable_link").appendChild(a);     
+    
+    // Outputting fixed rate HECM benefits.
     if (objHECM.piPayment > 0) {
         myh_addDescTitle ("• Eliminate mortgage payment, which saves you " + formatMoney(objHECM.piPayment,$,0) + "/month.", 'myh_js_calc_output_wrapper_fixed', true );
         myh_addDescTitle ("Your mortgage payment will be eliminated, saving you " + formatMoney(objHECM.piPayment,$,0) + "/month and " + formatMoney(objHECM.piPayment * 12,$,0) + " per year. You remain the owner of your home, so you'll continue paying property taxes and homeowner's insurance.", 'myh_js_calc_output_wrapper_fixed', false );
@@ -16081,4 +16135,63 @@ function jsCalculateHECM () {
     
     myh_addDescTitle ('• Lump sum at closing: ' + formatMoney(objHECM.firstYearMoneyFixed,$,0), 'myh_js_calc_output_wrapper_fixed', true );
     myh_addDescTitle ("You\'ll receive an estimated lump sum payout of " + formatMoney(objHECM.firstYearMoneyFixed,$,0) + " at closing, which can be used whatever you like (pay off bills, home improvements, etc.).", 'myh_js_calc_output_wrapper_fixed' , false );
+
+    
+//    var button = document.createElement("BUTTON");
+//    var buttonText = document.createTextNode("< Back");
+//
+//    button.appendChild(buttonText);
+//    parentElement.appendChild(button);
+//    
+//    btn.setAttribute("onclick", "jsCalculateHECM()"); 
+document.getElementById('myh_js_calc_input_wrapper').style.visibility = 'hidden';
+document.getElementById('myh_js_calc_input_wrapper').style.opacity = 0;
+
+    document.getElementById('myh_js_calc_output_wrapper_variable').style.visibility = 'visible';
+document.getElementById('myh_js_calc_output_wrapper_variable').style.opacity = 1;
+
+    //$("#myh_js_calc_input_wrapper").fadeOut();
+   // $("#myh_js_calc_output_wrapper_variable").fadeIn();
+    
+}
+
+function myhFadeToFixedResults () {
+
+    
+document.getElementById('myh_js_calc_output_wrapper_variable').style.visibility = 'hidden';
+document.getElementById('myh_js_calc_output_wrapper_variable').style.opacity = 0;  
+
+    document.getElementById('myh_js_calc_output_wrapper_fixed').style.visibility = 'visible';
+document.getElementById('myh_js_calc_output_wrapper_fixed').style.opacity = 1;
+//    $("#myh_js_calc_output_wrapper_variable").fadeOut();
+//    $("#myh_js_calc_output_wrapper_fixed").fadeIn();
+}
+
+function myhFadeToVariableResults () {
+    
+document.getElementById('myh_js_calc_output_wrapper_fixed').style.visibility = 'hidden';
+document.getElementById('myh_js_calc_output_wrapper_fixed').style.opacity = 0;      
+    
+    document.getElementById('myh_js_calc_output_wrapper_variable').style.visibility = 'visible';
+document.getElementById('myh_js_calc_output_wrapper_variable').style.opacity = 1;
+    
+
+
+    //fadeIn('myh_js_calc_output_wrapper_variable');
+//    $("#myh_js_calc_output_wrapper_variable").fadeIn();
+//    $("#myh_js_calc_output_wrapper_fixed").fadeOut();
+}
+
+function fadeIn(elementID) {
+    var fade = document.getElementById(elementID);
+    var opacity = 0;
+    var intervalID = setInterval(function() {
+
+        if (opacity < 1) {
+            opacity = opacity + 0.1
+            fade.style.opacity = opacity;
+        } else {
+            clearInterval(intervalID);
+        }
+    }, 200);
 }
